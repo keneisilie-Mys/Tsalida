@@ -69,10 +69,4 @@ public class SongTitleAdapter2 extends RecyclerView.Adapter<SongTitleAdapter2.Vi
             }
         });
     }
-
-
-    //Setting the context
-    /*public void setListener(Listener listener) {
-        this.listener = (Listener) context;
-    }*/
 }

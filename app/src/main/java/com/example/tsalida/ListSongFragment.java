@@ -29,11 +29,6 @@ public class ListSongFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_song, container, false);
 
-        /*//Get the data from the asset to arrays
-        SongLists songLists = new SongLists(view.getContext());
-        String[] angamiTitle = songLists.getAngamiTitle();
-        String[] englishTitle = songLists.getEnglishTitles(); */
-
         ////Gonna pass song titles to the song objects
         List<Song> songList = new ArrayList<>(); //This is the song object array
         AssetManager assetManager = getContext().getAssets();
@@ -59,7 +54,6 @@ public class ListSongFragment extends Fragment {
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         //Passing the datas to the adapter
-        //SongTitleAdapter adapter = new SongTitleAdapter(angamiTitle, englishTitle);
         SongTitleAdapter2 adapter = new SongTitleAdapter2(songList, (SongTitleAdapter2.Listener) getActivity());
 
         //Get the recycler view
@@ -70,31 +64,8 @@ public class ListSongFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-
-        //Implement the interface for the song title adapter
-        /*adapter.setListener(new SongTitleAdapter.Listener() {
-            @Override
-            public void onClickViewHolder(int position) {
-                if(listenerFrag != null){
-                    listenerFrag.onClickPassPosition(songList);
-                }
-            }
-        }); */
         return view;
 
 
     }
-
-    //Making an interface to communicate with the main activity
-    /*interface Listener{
-        void onClickPassPosition(int position);
-    }
-
-    private Listener listenerFrag;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.listenerFrag = (Listener) context;
-    }*/
 }

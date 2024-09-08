@@ -63,39 +63,8 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter2
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-
-    //I discovered that setting the layout behaviour of the bottom nav view, the coordinator layout will make sure the above view doesnt overlap with the bottom nav view
-        //Setting the layout height of the fragment container programatically
-        /*FrameLayout frameLayout = findViewById(R.id.fragmentContainer);
-        bottomNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                bottomNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int bottomNavHeight = bottomNavigationView.getHeight();
-
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams();
-                layoutParams.bottomMargin = bottomNavHeight;
-                frameLayout.setLayoutParams(layoutParams);
-
-            }
-        }); */
     }
-    //Getting the position clicked from the List fragment
-    /*@Override
-    public void onClickPassPosition(int position) {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-
-        //SongFragment fragment = new SongFragment();
-        //Bundle args = new Bundle();
-        //args.putInt("positionArg", position);
-        //fragment.setArguments(args);
-
-        bottomNavigationView.setSelectedItemId(R.id.item2); //If it comes after replacing the fragment, this method will call the onNavigationItemSelected again
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment(position)).commit();
-    } */
-
-
-    ///////Directly from the adapter (instead of the method commented above)
+    ///////Get the position directly from the adapter
     @Override
     public void onClickViewHolder(int songIndex) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
