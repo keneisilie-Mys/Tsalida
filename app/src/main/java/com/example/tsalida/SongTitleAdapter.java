@@ -1,5 +1,6 @@
 package com.example.tsalida;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.ViewHolder> {
-    List<Song> songLists2;
+    List<Song> songLists;
     //Making an interface
     interface Listener{
         void onClickViewHolder(int songIndex);
@@ -20,8 +21,8 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
     private final Listener listener;
 
     //The adapter constructor
-    SongTitleAdapter(List<Song> songLists2, Listener listener){
-        this.songLists2 = songLists2;
+    SongTitleAdapter(List<Song> songLists, Listener listener){
+        this.songLists = songLists;
         this.listener = listener;
     }
 
@@ -35,7 +36,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
 
     @Override
     public int getItemCount() {
-        return songLists2.toArray().length;
+        return songLists.toArray().length;
     }
 
     @NonNull
@@ -52,7 +53,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         TextView angami = cardView.findViewById(R.id.angami_title);
         TextView number = cardView.findViewById(R.id.index);
 
-        Song song = songLists2.get(position);
+        Song song = songLists.get(position);
         english.setText(song.getEnglishTitle());
         angami.setText(song.getLocalTitle());
         number.setText(String.valueOf(song.getSongIndex()));
@@ -66,5 +67,10 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
                 }
             }
         });
+    }
+
+    public void filterList(List<Song> filteredList){
+        songLists = filteredList;
+        notifyDataSetChanged();
     }
 }

@@ -6,14 +6,14 @@
         android:title="@string/search_toolbar"
         android:icon="@drawable/search_icon"
         android:orderInCategory="1"
-        app:showAsAction="always"
-        app:actionViewClass="com.google.android.material.search.SearchView"/>
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:id="@+id/item2"
         android:title="@string/sort_toolbar"
         android:icon="@drawable/alpha_sort_icon"
-        android:orderInCategory="1"
-        app:showAsAction="always" />
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom" />
 
 </menu>
