@@ -1,10 +1,8 @@
 package com.example.tsalida;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class SongTitleAdapter2 extends RecyclerView.Adapter<SongTitleAdapter2.ViewHolder> {
+public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.ViewHolder> {
     List<Song> songLists2;
     //Making an interface
     interface Listener{
@@ -22,7 +20,7 @@ public class SongTitleAdapter2 extends RecyclerView.Adapter<SongTitleAdapter2.Vi
     private final Listener listener;
 
     //The adapter constructor
-    SongTitleAdapter2(List<Song> songLists2, Listener listener){
+    SongTitleAdapter(List<Song> songLists2, Listener listener){
         this.songLists2 = songLists2;
         this.listener = listener;
     }

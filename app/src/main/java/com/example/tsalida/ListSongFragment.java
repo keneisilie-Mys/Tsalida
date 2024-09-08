@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,7 +53,7 @@ public class ListSongFragment extends Fragment {
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         //Passing the datas to the adapter
-        SongTitleAdapter2 adapter = new SongTitleAdapter2(songList, (SongTitleAdapter2.Listener) getActivity());
+        SongTitleAdapter adapter = new SongTitleAdapter(songList, (SongTitleAdapter.Listener) getActivity());
 
         //Get the recycler view
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
