@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Tsalida</string>
+
+    <string name="list_bottom">List</string>
+    <string name="song_bottom">Hymn</string>
+    <string name="fav_bottom">Favorites</string>
+    <string name="extra_bottom">More</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="share_toolbar">Share</string>
+    <string name="add_fav_toolbar">Add as Favorite</string>
+
+    <string name="search_toolbar">Search</string>
+    <string name="sort_toolbar">Sort</string>
+</resources>
