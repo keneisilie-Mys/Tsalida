@@ -36,12 +36,12 @@ public class ListSongFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_song, container, false);
 
-        //Get the toolbar
+        //Change the toolbar name
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("List of Hymns");
 
 
-        ////Gonna pass song titles to the song objects
+        ////Gonna read song titles from ASSETS and add it to the song objects
         List<Song> songList = new ArrayList<>(); //This is the song object array
         AssetManager assetManager = getContext().getAssets();
         AssetManager assetManager2 = getContext().getAssets();
@@ -64,8 +64,8 @@ public class ListSongFragment extends Fragment {
             e.printStackTrace();
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
-        //Passing the datas to the adapter
-        SongTitleAdapter adapter = new SongTitleAdapter(songList, (SongTitleAdapter.Listener) getActivity());
+        //Passing the data to the adapter
+        SongTitleAdapter adapter = new SongTitleAdapter(songList, getActivity());
 
         //Adding menu to the toolbar
         MenuProvider menuProvider = new MenuProvider() {

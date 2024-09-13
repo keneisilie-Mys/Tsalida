@@ -1,9 +1,18 @@
 package com.example.tsalida;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +23,7 @@ import java.util.List;
 
 public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.ViewHolder> {
     List<Song> songLists;
+    Context context;
     //Making an interface
     interface Listener{
         void onClickViewHolder(int songIndex);
@@ -21,9 +31,10 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
     private final Listener listener;
 
     //The adapter constructor
-    SongTitleAdapter(List<Song> songLists, Listener listener){
+    SongTitleAdapter(List<Song> songLists, Context context){
         this.songLists = songLists;
-        this.listener = listener;
+        this.context = context;
+        this.listener = (Listener) context;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -52,7 +63,36 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         TextView english = cardView.findViewById(R.id.english_title);
         TextView angami = cardView.findViewById(R.id.angami_title);
         TextView number = cardView.findViewById(R.id.index);
+        ImageButton favButton = cardView.findViewById(R.id.favorite_button);
 
+        //Passing the position to a variable to kind of make it final
+        int positionFinal = position;
+
+        //Setting the favorite icon based on the data in the database
+        try{
+
+            SQLiteOpenHelper database = new FavoriteDatabase(context);
+            SQLiteDatabase db = database.getReadableDatabase();
+
+            Cursor cursor = db.query("FAVORITES", new String[]{"_id", "IS_FAVORITE"}, "_id=?", new String[]{Integer.toString(position+1)}, null, null, null);
+
+            boolean isFavorite = false;
+            if(cursor.moveToFirst()){
+                isFavorite = (cursor.getInt(1) == 1);
+            }
+
+            if(isFavorite){
+                favButton.setTag("1");
+                favButton.setImageResource(R.drawable.favorite_filled_icon);
+            }else{
+                favButton.setImageResource(R.drawable.favorites_icon);
+            }
+            db.close();
+            cursor.close();
+
+        }catch(Exception e){
+            Log.d("Enter1Error", "Enter1error");
+        }
         Song song = songLists.get(position);
         english.setText(song.getEnglishTitle());
         angami.setText(song.getLocalTitle());
@@ -67,7 +107,43 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
                 }
             }
         });
+        //Setting the on Click Listener to the image view
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if((favButton.getTag()).equals("0")){  //use equals because the getTag returns a String object
+                    favButton.setImageResource(R.drawable.favorite_filled_icon);
+                    updateDatabase(positionFinal, 1);
+                    favButton.setTag("1");
+                }else{
+                    favButton.setImageResource(R.drawable.favorites_icon);
+                    updateDatabase(positionFinal, 0);
+                    favButton.setTag("0");
+                }
+            }
+        });
+
     }
+
+    private void updateDatabase(int position, int tag) {
+        try{
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("IS_FAVORITE", tag);
+
+
+            SQLiteOpenHelper openHelper = new FavoriteDatabase(context);
+            SQLiteDatabase database = openHelper.getReadableDatabase();
+            database.update("FAVORITES", contentValues, "_id=?", new String[]{(Integer.toString(position+1))});
+
+            database.close();
+        }catch(Exception e){
+            Log.d("Enter2Error", "Enter2error");
+        }
+    }
+
 
     public void filterList(List<Song> filteredList){
         songLists = filteredList;
