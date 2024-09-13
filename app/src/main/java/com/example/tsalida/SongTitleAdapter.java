@@ -67,6 +67,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
 
         //Passing the position to a variable to kind of make it final
         int positionFinal = position;
+        Song song = songLists.get(position);
 
         //Setting the favorite icon based on the data in the database
         try{
@@ -74,7 +75,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
             SQLiteOpenHelper database = new FavoriteDatabase(context);
             SQLiteDatabase db = database.getReadableDatabase();
 
-            Cursor cursor = db.query("FAVORITES", new String[]{"_id", "IS_FAVORITE"}, "_id=?", new String[]{Integer.toString(position+1)}, null, null, null);
+            Cursor cursor = db.query("FAVORITES", new String[]{"_id", "IS_FAVORITE"}, "_id=?", new String[]{Integer.toString(song.getSongIndex())}, null, null, null);
 
             boolean isFavorite = false;
             if(cursor.moveToFirst()){
@@ -93,7 +94,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         }catch(Exception e){
             Log.d("Enter1Error", "Enter1error");
         }
-        Song song = songLists.get(position);
+
         english.setText(song.getEnglishTitle());
         angami.setText(song.getLocalTitle());
         number.setText(String.valueOf(song.getSongIndex()));
@@ -115,11 +116,11 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
 
                 if((favButton.getTag()).equals("0")){  //use equals because the getTag returns a String object
                     favButton.setImageResource(R.drawable.favorite_filled_icon);
-                    updateDatabase(positionFinal, 1);
+                    updateDatabase(song.getSongIndex(), 1);
                     favButton.setTag("1");
                 }else{
                     favButton.setImageResource(R.drawable.favorites_icon);
-                    updateDatabase(positionFinal, 0);
+                    updateDatabase(song.getSongIndex(), 0);
                     favButton.setTag("0");
                 }
             }
@@ -136,7 +137,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
 
             SQLiteOpenHelper openHelper = new FavoriteDatabase(context);
             SQLiteDatabase database = openHelper.getReadableDatabase();
-            database.update("FAVORITES", contentValues, "_id=?", new String[]{(Integer.toString(position+1))});
+            database.update("FAVORITES", contentValues, "_id=?", new String[]{(Integer.toString(position))});
 
             database.close();
         }catch(Exception e){
