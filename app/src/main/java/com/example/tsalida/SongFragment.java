@@ -1,20 +1,25 @@
 package com.example.tsalida;
 
+import android.app.Application;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
-import android.view.ContentInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +29,11 @@ import android.view.ViewGroup;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.jsibbold.zoomage.BuildConfig;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class SongFragment extends Fragment {
@@ -64,11 +74,11 @@ public class SongFragment extends Fragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
 
+                //Setting the toolbar for the default page that appears in the view pager
                 menuInflater.inflate(R.menu.song_toolbar_menu, menu);
-                MenuItem menuItem = menu.findItem(R.id.item1);
                 menuItemSong = menu.findItem(R.id.item1);
-                if(checkFavorite(position)){
-                    menuItem.setIcon(R.drawable.favorite_filled_icon);
+                if(checkFavorite(position)){    //This is the position that was passed to the fragment
+                    menuItemSong.setIcon(R.drawable.favorite_filled_icon);
                 }
                 ////////////////
                 //The following lines updates the menu according to the view pager
@@ -92,7 +102,7 @@ public class SongFragment extends Fragment {
 
                     //Changing menu item icon and updating database
                     try(SQLiteOpenHelper sqLiteOpenHelper = new FavoriteDatabase(getContext());
-                        SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();){
+                        SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase()){
                         int position = viewPager2.getCurrentItem();
                         Cursor cursor = database.query("FAVORITES", new String[]{"_id, IS_FAVORITE"}, "_id = ?", new String[]{Integer.toString(position+1)}, null, null, null);
                         int fav_int = 0;
@@ -113,6 +123,43 @@ public class SongFragment extends Fragment {
                         database.close();
                         cursor.close();
                     }
+                }
+                if(menuItem.getItemId() == R.id.item2){
+                    int position = viewPager2.getCurrentItem();
+
+                    String imageName = "page"+(position+1);
+                    Log.d("Position", imageName);
+                    int resId = getResources().getIdentifier(imageName, "drawable", getContext().getPackageName());
+
+                    //Getting the image from drawable as bitmap
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resId);
+
+                    //Create a new folder in the cache path
+                    File cachePath = new File(getContext().getCacheDir(), "images");
+                    cachePath.mkdirs(); //if folder exists this is ignored
+
+                    //Name the image file
+                    File file = new File(cachePath, "image.jpg");
+
+                    //Writing to the stream
+                    try(FileOutputStream stream = new FileOutputStream(file)){
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream); //Save the bitmap as jpg
+                    }catch(IOException e){
+                        Log.d("Failed", "Failed bruh");
+                    }
+
+                    //Get the content Uri using FileProvider
+                    Uri contentUri = FileProvider.getUriForFile(getContext(),  getContext().getPackageName() + ".fileprovider", file);
+
+                    //Finally make the intent
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //Granting read permission to other apps
+
+                    intent.setDataAndType(contentUri, getContext().getContentResolver().getType(contentUri));
+                    intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+
+                    startActivity(Intent.createChooser(intent, "Share using:"));
+
                 }
 
                 return false;
