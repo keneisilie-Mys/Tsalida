@@ -1,6 +1,5 @@
 package com.example.tsalida;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,11 +28,12 @@ import android.view.ViewGroup;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.jsibbold.zoomage.BuildConfig;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SongFragment extends Fragment {
@@ -68,6 +68,8 @@ public class SongFragment extends Fragment {
         //Changing the toolbar title in the main activity
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("Hymn");
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         ViewPager2 viewPager2 = rootView.findViewById(R.id.imageViewPager);
         //Changing the toolbar menu of the main activity
         MenuProvider menuProvider = new MenuProvider() {
@@ -128,7 +130,6 @@ public class SongFragment extends Fragment {
                     int position = viewPager2.getCurrentItem();
 
                     String imageName = "page"+(position+1);
-                    Log.d("Position", imageName);
                     int resId = getResources().getIdentifier(imageName, "drawable", getContext().getPackageName());
 
                     //Getting the image from drawable as bitmap
@@ -161,7 +162,6 @@ public class SongFragment extends Fragment {
                     startActivity(Intent.createChooser(intent, "Share using:"));
 
                 }
-
                 return false;
             }
         };
@@ -169,12 +169,21 @@ public class SongFragment extends Fragment {
 
 
         //Getting the ids of the images with their names to an array
-        int[] imageIds = new int[396];
+        //int[] imageIds = new int[396];
+        List<Integer> imageIds = new ArrayList<>();
         for (int i = 1; i <= 396; i++) {
             String itemName = "page" + i;
             int resId = getResources().getIdentifier(itemName, "drawable", getContext().getPackageName());
-            imageIds[i - 1] = resId;
+            imageIds.add(resId);
         }
+
+//        for (int i = 1; i <= 396; i++) {
+//            String itemName = "page" + i;
+//            int resId = getResources().getIdentifier(itemName, "drawable", getContext().getPackageName());
+//            imageIds[i - 1] = resId;
+//        }
+
+
         //Setting the image ids to the adapter then to the viewpager
         ImageAdapterr adapter = new ImageAdapterr(imageIds);
         viewPager2.setAdapter(adapter);

@@ -39,7 +39,7 @@ public class ListSongFragment extends Fragment {
         //Change the toolbar name
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("List of Hymns");
-
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         ////Gonna read song titles from ASSETS and add it to the song objects
         List<Song> songList = new ArrayList<>(); //This is the song object array

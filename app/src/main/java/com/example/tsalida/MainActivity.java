@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
                 } else if (item.getItemId() == R.id.item2) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment()).commit();
                     return true;
+                }else if (item.getItemId() == R.id.item3) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment(), "MyFragment").commit(); //The tag helps find fragments that are added to the backstack
+                    return true;
                 }
                 return true;
             }
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+
     }
     ///////Get the position directly from the adapter
     @Override
@@ -164,3 +169,4 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         return pos;
     }
 }
+

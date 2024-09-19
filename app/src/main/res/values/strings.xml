@@ -11,4 +11,6 @@
 
     <string name="search_toolbar">Search</string>
     <string name="sort_toolbar">Sort</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

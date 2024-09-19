@@ -1,6 +1,5 @@
 package com.example.tsalida;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,13 +62,10 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         TextView number = cardView.findViewById(R.id.index);
         ImageButton favButton = cardView.findViewById(R.id.favorite_button);
 
-        //Passing the position to a variable to kind of make it final
-        int positionFinal = position;
         Song song = songLists.get(position);
 
         //Setting the favorite icon based on the data in the database
         try{
-
             SQLiteOpenHelper database = new FavoriteDatabase(context);
             SQLiteDatabase db = database.getReadableDatabase();
 
@@ -108,12 +102,10 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
                 }
             }
         });
-        //Setting the on Click Listener to the image view
+        //Setting the on Click Listener to the image button
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if((favButton.getTag()).equals("0")){  //use equals because the getTag returns a String object
                     favButton.setImageResource(R.drawable.favorite_filled_icon);
                     updateDatabase(song.getSongIndex(), 1);
@@ -130,7 +122,6 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
 
     private void updateDatabase(int position, int tag) {
         try{
-
             ContentValues contentValues = new ContentValues();
             contentValues.put("IS_FAVORITE", tag);
 
