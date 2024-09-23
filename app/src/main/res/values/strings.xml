@@ -11,6 +11,15 @@
 
     <string name="search_toolbar">Search</string>
     <string name="sort_toolbar">Sort</string>
+
+    <string-array name="more_strings">
+        <item>Responsive Reading</item>
+        <item>End Pages</item>
+        <item>Support</item>
+    </string-array>
+    <string name="responsive">Responsive Reading</string>
+    <string name="end">End Pages</string>
+    <string name="support">Support</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

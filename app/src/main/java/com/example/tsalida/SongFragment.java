@@ -47,7 +47,6 @@ public class SongFragment extends Fragment {
     }
 
     private View rootView;
-    private Menu menuSong; //A menu reference because i want to access its icons
     private MenuItem menuItemSong;
 
     @Override
@@ -177,21 +176,11 @@ public class SongFragment extends Fragment {
             imageIds.add(resId);
         }
 
-//        for (int i = 1; i <= 396; i++) {
-//            String itemName = "page" + i;
-//            int resId = getResources().getIdentifier(itemName, "drawable", getContext().getPackageName());
-//            imageIds[i - 1] = resId;
-//        }
-
-
         //Setting the image ids to the adapter then to the viewpager
         ImageAdapterr adapter = new ImageAdapterr(imageIds);
         viewPager2.setAdapter(adapter);
         viewPager2.setPageTransformer(new DepthPageTransformer());
         viewPager2.setCurrentItem(position, false);
-
-
-
 
         // Inflate the layout for this fragment
         return rootView;
@@ -214,5 +203,4 @@ public class SongFragment extends Fragment {
         }
         return false;
     }
-
 }

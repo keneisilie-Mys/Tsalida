@@ -65,10 +65,8 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         Song song = songLists.get(position);
 
         //Setting the favorite icon based on the data in the database
-        try{
-            SQLiteOpenHelper database = new FavoriteDatabase(context);
-            SQLiteDatabase db = database.getReadableDatabase();
-
+        try(SQLiteOpenHelper database = new FavoriteDatabase(context);
+            SQLiteDatabase db = database.getReadableDatabase()){
             Cursor cursor = db.query("FAVORITES", new String[]{"_id", "IS_FAVORITE"}, "_id=?", new String[]{Integer.toString(song.getSongIndex())}, null, null, null);
 
             boolean isFavorite = false;
@@ -82,9 +80,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
             }else{
                 favButton.setImageResource(R.drawable.favorites_icon);
             }
-            db.close();
             cursor.close();
-
         }catch(Exception e){
             Log.d("Enter1Error", "Enter1error");
         }

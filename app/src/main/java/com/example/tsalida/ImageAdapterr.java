@@ -12,8 +12,6 @@ import com.jsibbold.zoomage.ZoomageView;
 import java.util.List;
 
 public class ImageAdapterr extends RecyclerView.Adapter<ImageAdapterr.ViewHolder> {
-    //private int[] imageIds;
-
     private List<Integer> imageids2;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -27,7 +25,6 @@ public class ImageAdapterr extends RecyclerView.Adapter<ImageAdapterr.ViewHolder
     //The constructor for the outer class
     public ImageAdapterr(List<Integer> imageIds){
         this.imageids2 = imageIds;
-        //this.imageIds = imageIds;
     }
 
     //Overriding the item count
@@ -50,9 +47,5 @@ public class ImageAdapterr extends RecyclerView.Adapter<ImageAdapterr.ViewHolder
         ZoomageView zoomageView = holder.zoomageView;
 
         zoomageView.setImageResource(imageids2.get(position));
-    }
-
-    public List<Integer> getImageRes(){
-        return imageids2;
     }
 }

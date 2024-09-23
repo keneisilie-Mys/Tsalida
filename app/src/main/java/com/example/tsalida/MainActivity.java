@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
                 }else if (item.getItemId() == R.id.item3) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment(), "MyFragment").commit(); //The tag helps find fragments that are added to the backstack
                     return true;
+                }else if (item.getItemId() == R.id.item4) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment()).commit();
+                    return true;
                 }
                 return true;
             }
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment(adjustedIndex)).commit();
     }
 
-    //Methhod to adjust the index of the song
+    //Method to adjust the index of the song
     public int adjustIndex(int pos){
         if(pos >11 && pos <17){
             return pos-1;

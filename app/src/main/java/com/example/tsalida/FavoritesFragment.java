@@ -22,7 +22,6 @@ public class FavoritesFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("Favorites");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
         RecyclerView recyclerView = view.findViewById(R.id.recycler_viewFAv);
         SongTitleAdapterFav adapter = new SongTitleAdapterFav(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
