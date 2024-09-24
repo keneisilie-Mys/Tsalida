@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tsalida.DepthPageTransformer;
+import com.example.tsalida.FavoriteDatabase;
+import com.example.tsalida.adapters.ImageAdapterr;
+import com.example.tsalida.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -34,9 +39,9 @@ public class FavoritesFragment2 extends Fragment {
     private int position;
     private List<Integer> favImage = new ArrayList<>();
 
-    FavoritesFragment2(){}
+    public FavoritesFragment2(){}
 
-    FavoritesFragment2(int positionOnList){
+    public FavoritesFragment2(int positionOnList){
         this.position = positionOnList;
     }
 

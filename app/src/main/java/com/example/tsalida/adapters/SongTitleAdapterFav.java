@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tsalida.FavoriteDatabase;
+import com.example.tsalida.R;
+import com.example.tsalida.Song;
+import com.example.tsalida.fragments.FavoritesFragment2;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,7 +35,7 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
     Context context;
 
     //The adapter constructor
-    SongTitleAdapterFav(Context context){
+    public SongTitleAdapterFav(Context context){
         this.context = context;
         this.songList = getSongLists();
         this.favList = updateList(songList);

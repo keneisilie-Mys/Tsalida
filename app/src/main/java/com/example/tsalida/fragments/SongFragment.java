@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.fragments;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -26,6 +26,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tsalida.DepthPageTransformer;
+import com.example.tsalida.FavoriteDatabase;
+import com.example.tsalida.adapters.ImageAdapterr;
+import com.example.tsalida.R;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -39,10 +43,10 @@ import java.util.List;
 public class SongFragment extends Fragment {
     private int position;
 
-    SongFragment() {
+    public SongFragment() {
     }
 
-    SongFragment(int position) {
+    public SongFragment(int position) {
         this.position = position;
     }
 

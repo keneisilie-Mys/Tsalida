@@ -9,13 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
+import com.example.tsalida.adapters.SongTitleAdapter;
+import com.example.tsalida.fragments.FavoritesFragment;
+import com.example.tsalida.fragments.ListSongFragment;
+import com.example.tsalida.fragments.MoreFragment;
+import com.example.tsalida.fragments.SongFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity implements SongTitleAdapter.Listener{
-
+public class MainActivity extends AppCompatActivity implements SongTitleAdapter.Listener {
 
 
     @Override

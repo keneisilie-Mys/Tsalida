@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.fragments;
 
 import android.os.Bundle;
 
@@ -16,6 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.tsalida.adapters.MoreListAdapter;
+import com.example.tsalida.R;
 
 public class EndFragment extends Fragment {
 

@@ -5,7 +5,7 @@ public class Song {
     String localTitle;
     int SongIndex;
 
-    Song(String localTitle, String englishTitle, int SongIndex){
+    public Song(String localTitle, String englishTitle, int SongIndex){
         this.localTitle = localTitle;
         this.englishTitle = englishTitle;
         this.SongIndex = SongIndex;

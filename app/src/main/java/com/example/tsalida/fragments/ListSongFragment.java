@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.fragments;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -19,6 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.example.tsalida.R;
+import com.example.tsalida.Song;
+import com.example.tsalida.adapters.SongTitleAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

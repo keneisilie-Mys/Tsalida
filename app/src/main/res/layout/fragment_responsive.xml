@@ -4,6 +4,6 @@
     android:id="@+id/recycler_viewRR"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResponsiveFragment"
+    tools:context=".fragments.ResponsiveFragment"
     android:clipToPadding="false"
     android:paddingVertical="5dp"/>

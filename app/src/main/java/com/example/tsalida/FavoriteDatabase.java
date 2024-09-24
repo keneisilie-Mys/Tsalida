@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class FavoriteDatabase extends SQLiteOpenHelper {
-    FavoriteDatabase(Context context){
+    public FavoriteDatabase(Context context){
         super(context, "FavoritesDB", null, 1);
     }
 

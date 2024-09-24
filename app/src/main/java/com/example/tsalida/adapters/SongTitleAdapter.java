@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,19 +16,23 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tsalida.FavoriteDatabase;
+import com.example.tsalida.R;
+import com.example.tsalida.Song;
+
 import java.util.List;
 
 public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.ViewHolder> {
     List<Song> songLists;
     Context context;
     //Making an interface
-    interface Listener{
+    public interface Listener{
         void onClickViewHolder(int songIndex);
     }
     private final Listener listener;
 
     //The adapter constructor
-    SongTitleAdapter(List<Song> songLists, Context context){
+    public SongTitleAdapter(List<Song> songLists, Context context){
         this.songLists = songLists;
         this.context = context;
         this.listener = (Listener) context;

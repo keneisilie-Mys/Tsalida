@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.example.tsalida.fragments;
 
 import android.os.Bundle;
 
@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.tsalida.R;
+import com.example.tsalida.adapters.SongTitleAdapterFav;
 
 public class FavoritesFragment extends Fragment {
 
