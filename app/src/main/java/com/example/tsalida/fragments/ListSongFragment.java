@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,9 +34,12 @@ import java.util.List;
 
 public class ListSongFragment extends Fragment {
 
+    private boolean isAlpha = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_song, container, false);
 
@@ -66,9 +70,12 @@ public class ListSongFragment extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
+        List<Song> songListSort = new ArrayList<>(songList);
+        songListSort.sort((one, two) -> {return one.getLocalTitle().compareTo(two.getLocalTitle());});
         ////////////////////////////////////////////////////////////////////////////////////////////
         //Passing the data to the adapter
         SongTitleAdapter adapter = new SongTitleAdapter(songList, getActivity());
+
 
         //Adding menu to the toolbar
         MenuProvider menuProvider = new MenuProvider() {
@@ -76,8 +83,27 @@ public class ListSongFragment extends Fragment {
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.list_song_menu, menu);
                 MenuItem item = menu.findItem(R.id.item1);
+                MenuItem item2 = menu.findItem(R.id.item2);
                 SearchView searchView = (SearchView) item.getActionView();
                 searchView.setQueryHint("Search");
+                searchView.setMaxWidth(Integer.MAX_VALUE);
+
+                //Listening for the expanded search view
+                //Remember that you had to set item2 showasaction as 'always', else it moves to the overflow area when the search view is clicked
+                item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(@NonNull MenuItem menuItem) {
+                        item2.setVisible(false);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionCollapse(@NonNull MenuItem menuItem) {
+                        item2.setVisible(true);
+                        return true;
+                    }
+                });
+
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -89,24 +115,44 @@ public class ListSongFragment extends Fragment {
                     public boolean onQueryTextChange(String newText) {
                         List<Song> filteredList = new ArrayList<>();
 
-                        for(Song song: songList){
-                            if((Integer.toString(song.getSongIndex()).contains(newText)) || song.getEnglishTitle().toLowerCase().contains(newText.toLowerCase()) || song.getLocalTitle().toLowerCase().contains(newText.toLowerCase())){
-                                filteredList.add(song);
+                        if(isAlpha){
+                            for(Song song: songList){
+                                if((Integer.toString(song.getSongIndex()).contains(newText)) || song.getEnglishTitle().toLowerCase().contains(newText.toLowerCase()) || song.getLocalTitle().toLowerCase().contains(newText.toLowerCase())){
+                                    filteredList.add(song);
+                                }
                             }
                         }
-                        if(newText == null){
-                            //Setting the default value to the adapter
-                            adapter.filterList(songList);
-                        }else{
-                            adapter.filterList(filteredList);
+                        else {
+                            for(Song song: songListSort){
+                                if((Integer.toString(song.getSongIndex()).contains(newText)) || song.getEnglishTitle().toLowerCase().contains(newText.toLowerCase()) || song.getLocalTitle().toLowerCase().contains(newText.toLowerCase())){
+                                    filteredList.add(song);
+                                }
+                            }
                         }
+                        adapter.filterList(filteredList);
                         return false;
                     }
                 });
+
             }
+
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+
+                if(menuItem.getItemId() == R.id.item2){
+                    if(isAlpha){
+                        menuItem.setIcon(R.drawable.num_sort_icon);
+                        adapter.filterList(songListSort);
+                        isAlpha = false;
+                    }
+                    else{
+                        adapter.filterList(songList);
+                        menuItem.setIcon(R.drawable.alpha_sort_icon);
+                        isAlpha = true;
+                    }
+
+                }
                 return false;
             }
         };
