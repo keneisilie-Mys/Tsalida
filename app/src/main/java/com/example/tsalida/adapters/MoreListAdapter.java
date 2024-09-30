@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tsalida.R;
@@ -54,11 +55,11 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.ViewHo
         title.setText(titles[position]);
 
         cardView.setOnClickListener(view -> {
-            Fragment fragment = ((AppCompatActivity)context).getSupportFragmentManager().findFragmentByTag("ResponsiveFrag");
+            Fragment fragment = ((AppCompatActivity)context).getSupportFragmentManager().findFragmentByTag("ResponsiveList");
             if(fragment!=null){
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position)).commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position), "ResponsiveImage").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
             }else{
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndImageFragment(position)).commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndImageFragment(position), "EndImage").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
             }
         });
     }

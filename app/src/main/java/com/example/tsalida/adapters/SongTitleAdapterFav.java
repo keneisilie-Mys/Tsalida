@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tsalida.FavoriteDatabase;
@@ -108,7 +109,7 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavFrag2").commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavoriteFragment2").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
             }
         });
 

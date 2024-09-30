@@ -30,6 +30,12 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:background="@color/for_backgrounds"
+        android:foregroundTint="@color/bottom_tint"
+        app:elevation="0dp"
+        app:itemIconTint="@color/bottom_nav_icon_sel"
+        app:itemTextColor="@color/bottom_nav_icon_sel"
+        app:itemRippleColor="@color/bottom_nav_icon_sel"
+
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

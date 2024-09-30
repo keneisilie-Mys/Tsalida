@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -66,7 +67,7 @@ public class FavoritesFragment2 extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if(menuItem.getItemId() == android.R.id.home){
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
                 }
                 if(menuItem.getItemId() == R.id.item1){
                     int position = viewPager2.getCurrentItem();

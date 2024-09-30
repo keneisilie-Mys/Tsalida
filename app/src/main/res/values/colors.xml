@@ -6,4 +6,7 @@
     <color name="for_backgrounds">#FFFFFFFF</color>
     <color name="for_status_bars">#FFFFFFFF</color>
     <color name="linear_layout_card_bg">#A29C9C</color>
+    <color name="grey">#5B5959</color>
+    <color name="bottom_tint">#FFD600</color>
+
 </resources>

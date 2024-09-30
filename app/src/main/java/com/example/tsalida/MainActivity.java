@@ -1,19 +1,27 @@
 package com.example.tsalida;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.window.OnBackInvokedDispatcher;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tsalida.adapters.SongTitleAdapter;
+import com.example.tsalida.fragments.EndFragment;
 import com.example.tsalida.fragments.FavoritesFragment;
 import com.example.tsalida.fragments.ListSongFragment;
 import com.example.tsalida.fragments.MoreFragment;
+import com.example.tsalida.fragments.ResponsiveFragment;
 import com.example.tsalida.fragments.SongFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -27,10 +35,43 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         setContentView(R.layout.activity_main);
 
         //Setting the status bar color here since i failed changing it with the theme
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.for_status_bars));
+//        Window window = this.getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.setStatusBarColor(ContextCompat.getColor(this, R.color.for_status_bars));
+
+        //On back pressed
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Fragment favoriteFragment2 = getSupportFragmentManager().findFragmentByTag("FavoriteFragment2");
+
+                Fragment responsiveImage = getSupportFragmentManager().findFragmentByTag("ResponsiveImage");
+                Fragment responsiveList = getSupportFragmentManager().findFragmentByTag("ResponsiveList");
+
+                Fragment endImage = getSupportFragmentManager().findFragmentByTag("EndImage");
+                Fragment endList = getSupportFragmentManager().findFragmentByTag("EndList");
+
+                //For favorites fragment
+                if(favoriteFragment2!=null && favoriteFragment2.isVisible()){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+                //For Responsive reading fragments
+                else if(responsiveImage != null && responsiveImage.isVisible()){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveFragment(), "ResponsiveList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+                else if(responsiveList != null && responsiveList.isVisible()){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+                //For End Pages Fragment
+                else if(endImage != null && endImage.isVisible()){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndFragment(), "EndList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+                else if(endList != null && endList.isVisible()){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+            }
+        });
 
         //Declaring things to use later
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -42,23 +83,23 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                //getSupportFragmentManager().popBackStack("favFragment2", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if(item.getItemId() == R.id.item1){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListSongFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListSongFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                     return true;
                 } else if (item.getItemId() == R.id.item2) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                     return true;
                 }else if (item.getItemId() == R.id.item3) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment(), "MyFragment").commit(); //The tag helps find fragments that are added to the backstack
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment(), "FavoriteFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit(); //The tag helps find fragments that are added to the backstack
                     return true;
                 }else if (item.getItemId() == R.id.item4) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                     return true;
                 }
                 return true;
             }
         });
-
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
@@ -174,5 +215,5 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         }
         return pos;
     }
-}
 
+}

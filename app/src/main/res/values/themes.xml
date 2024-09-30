@@ -4,6 +4,22 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="searchViewStyle">@style/searchViewStyleMyEdit</item>
+        <item name="colorPrimary">@color/for_backgrounds</item> <!--This changes the status bar -->
+        <item name="colorPrimaryVariant">#FFC107</item>
+        <item name="colorOnPrimary">#03A9F4</item>
+        <item name="colorSecondary">@color/grey</item>
+        <item name="colorSurface">@color/for_backgrounds</item>
+        
+        <item name="colorPrimarySurface">#03A9F4</item>
+        <item name="colorOnSecondary">#03A9F4</item>
+        <item name="colorTertiary">#03A9F4</item>
+        <item name="colorAccent">#03A9F4</item>
+        <item name="colorBackgroundFloating">#03A9F4</item>
+
+        <item name="colorPrimaryContainer">#03A9F4</item>
+        <item name="colorOnPrimaryContainer">#03A9F4</item>
+        <item name="colorOnPrimarySurface">#03A9F4</item>
+
     </style>
 
     <!-- Overriding the search view background when it is clicked (Removing the bottom horizontal line) -->
