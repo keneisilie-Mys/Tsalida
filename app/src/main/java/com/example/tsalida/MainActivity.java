@@ -1,19 +1,14 @@
 package com.example.tsalida;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-import android.window.OnBackInvokedDispatcher;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tsalida.adapters.SongTitleAdapter;
@@ -28,6 +23,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements SongTitleAdapter.Listener {
 
+    private long backPressedTime = 0;
+    private Toast toast = Toast.makeText(MainActivity.this, "Press Back Again To Exit", Toast.LENGTH_SHORT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //        window.setStatusBarColor(ContextCompat.getColor(this, R.color.for_status_bars));
+
 
         //On back pressed
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -69,6 +67,17 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
                 }
                 else if(endList != null && endList.isVisible()){
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                }
+
+                //Double back to exit
+                else{
+                    if(backPressedTime + 2000 < System.currentTimeMillis()){
+                        toast.show();
+                        backPressedTime = System.currentTimeMillis();
+                    }else{
+                        toast.cancel();
+                        finish();
+                    }
                 }
             }
         });
