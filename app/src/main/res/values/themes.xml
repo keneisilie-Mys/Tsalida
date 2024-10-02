@@ -16,10 +16,6 @@
         <item name="colorAccent">#03A9F4</item>
         <item name="colorBackgroundFloating">#03A9F4</item>
 
-        <item name="colorPrimaryContainer">#03A9F4</item>
-        <item name="colorOnPrimaryContainer">#03A9F4</item>
-        <item name="colorOnPrimarySurface">#03A9F4</item>
-
     </style>
 
     <!-- Overriding the search view background when it is clicked (Removing the bottom horizontal line) -->

@@ -24,13 +24,13 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity implements SongTitleAdapter.Listener {
 
     private long backPressedTime = 0;
-    private Toast toast = Toast.makeText(MainActivity.this, "Press Back Again To Exit", Toast.LENGTH_SHORT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         //Setting the status bar color here since i failed changing it with the theme
 //        Window window = this.getWindow();
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
 //        window.setStatusBarColor(ContextCompat.getColor(this, R.color.for_status_bars));
 
 
+        Toast toast = Toast.makeText(MainActivity.this, "Press Back Again To Exit", Toast.LENGTH_SHORT);
         //On back pressed
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -82,11 +83,15 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
             }
         });
 
+        //For some reason the selected item and the fragment in the fragment container is retained even though the screen rotates
+        if(savedInstanceState !=null){
+            bottomNavigationView.setSelectedItemId(R.id.item4); //It didn't matter if this is here, the activity retained the seleted item itself when screen was rotated
+        }else{
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongFragment()).commit();
+            bottomNavigationView.setSelectedItemId(R.id.item2);
+        }
         //Declaring things to use later
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongFragment()).commit();
 
-        bottomNavigationView.setSelectedItemId(R.id.item2);
 
         //Method for responding to navigation clicks
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -113,6 +118,16 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         setSupportActionBar(toolbar);
 
     }
+
+    //The following onSaveInstanceState lines are redundant
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        int bottomId = bottomNavigationView.getSelectedItemId();
+        outState.putInt("BottomItem", bottomId);
+    }
+
     ///////Get the position directly from the adapter
     @Override
     public void onClickViewHolder(int songIndex) {

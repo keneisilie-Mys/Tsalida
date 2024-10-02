@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.tsalida.R;
+import com.google.android.material.appbar.AppBarLayout;
 
 public class MoreFragment extends Fragment {
     @Override
@@ -21,6 +22,10 @@ public class MoreFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("More");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        AppBarLayout appBarLayout = activity.findViewById(R.id.appBarLayout);
+        if(appBarLayout != null){
+            appBarLayout.setExpanded(true, true);
+        }
 
         View view = inflater.inflate(R.layout.fragment_more, container, false);
         Button button1 = view.findViewById(R.id.button1);

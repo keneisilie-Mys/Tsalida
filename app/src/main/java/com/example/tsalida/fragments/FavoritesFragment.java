@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.tsalida.R;
 import com.example.tsalida.adapters.SongTitleAdapterFav;
+import com.google.android.material.appbar.AppBarLayout;
 
 public class FavoritesFragment extends Fragment {
 
@@ -25,6 +26,10 @@ public class FavoritesFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("Favorites");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        AppBarLayout appBarLayout = activity.findViewById(R.id.appBarLayout);
+        if(appBarLayout != null){
+            appBarLayout.setExpanded(true, true);
+        }
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_viewFAv);
         SongTitleAdapterFav adapter = new SongTitleAdapterFav(getContext());

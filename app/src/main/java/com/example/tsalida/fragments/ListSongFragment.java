@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 
 import com.example.tsalida.R;
@@ -168,7 +169,5 @@ public class ListSongFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
-
-
     }
 }
