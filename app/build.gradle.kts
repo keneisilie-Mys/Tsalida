@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.tsalida"
+    namespace = "com.ken.tsalida"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.tsalida"
+        applicationId = "com.ken.tsalida"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

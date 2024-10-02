@@ -1,4 +1,4 @@
-package com.example.tsalida.fragments;
+package com.ken.tsalida.fragments;
 
 import android.os.Bundle;
 
@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tsalida.adapters.MoreListAdapter;
-import com.example.tsalida.R;
+import com.ken.tsalida.adapters.MoreListAdapter;
+import com.ken.tsalida.R;
 
 public class ResponsiveFragment extends Fragment {
 

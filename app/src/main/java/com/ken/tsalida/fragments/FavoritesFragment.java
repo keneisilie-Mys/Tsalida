@@ -1,4 +1,4 @@
-package com.example.tsalida.fragments;
+package com.ken.tsalida.fragments;
 
 import android.os.Bundle;
 
@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tsalida.R;
-import com.example.tsalida.adapters.SongTitleAdapterFav;
+import com.ken.tsalida.R;
+import com.ken.tsalida.adapters.SongTitleAdapterFav;
 import com.google.android.material.appbar.AppBarLayout;
 
 public class FavoritesFragment extends Fragment {

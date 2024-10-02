@@ -1,4 +1,4 @@
-package com.example.tsalida.adapters;
+package com.ken.tsalida.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,9 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tsalida.FavoriteDatabase;
-import com.example.tsalida.R;
-import com.example.tsalida.Song;
+import com.ken.tsalida.FavoriteDatabase;
+import com.ken.tsalida.R;
+import com.ken.tsalida.Song;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.tsalida.adapters;
+package com.ken.tsalida.adapters;
 
 
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tsalida.R;
+import com.ken.tsalida.R;
 import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.List;

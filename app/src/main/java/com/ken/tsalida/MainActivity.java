@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.ken.tsalida;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,13 +11,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.tsalida.adapters.SongTitleAdapter;
-import com.example.tsalida.fragments.EndFragment;
-import com.example.tsalida.fragments.FavoritesFragment;
-import com.example.tsalida.fragments.ListSongFragment;
-import com.example.tsalida.fragments.MoreFragment;
-import com.example.tsalida.fragments.ResponsiveFragment;
-import com.example.tsalida.fragments.SongFragment;
+import com.ken.tsalida.adapters.SongTitleAdapter;
+import com.ken.tsalida.fragments.EndFragment;
+import com.ken.tsalida.fragments.FavoritesFragment;
+import com.ken.tsalida.fragments.ListSongFragment;
+import com.ken.tsalida.fragments.MoreFragment;
+import com.ken.tsalida.fragments.ResponsiveFragment;
+import com.ken.tsalida.fragments.SongFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

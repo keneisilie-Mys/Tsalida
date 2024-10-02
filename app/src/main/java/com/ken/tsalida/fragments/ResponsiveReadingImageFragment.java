@@ -1,4 +1,4 @@
-package com.example.tsalida.fragments;
+package com.ken.tsalida.fragments;
 
 import android.os.Bundle;
 
@@ -16,9 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tsalida.DepthPageTransformer;
-import com.example.tsalida.adapters.MoreImagesAdapter;
-import com.example.tsalida.R;
+import com.ken.tsalida.DepthPageTransformer;
+import com.ken.tsalida.adapters.MoreImagesAdapter;
+import com.ken.tsalida.R;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

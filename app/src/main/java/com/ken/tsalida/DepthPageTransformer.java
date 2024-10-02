@@ -1,4 +1,4 @@
-package com.example.tsalida;
+package com.ken.tsalida;
 import android.view.View;
 
 import androidx.viewpager2.widget.ViewPager2;

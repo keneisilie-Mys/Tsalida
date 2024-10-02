@@ -1,4 +1,4 @@
-package com.example.tsalida.adapters;
+package com.ken.tsalida.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tsalida.R;
-import com.example.tsalida.fragments.EndImageFragment;
-import com.example.tsalida.fragments.ResponsiveReadingImageFragment;
+import com.ken.tsalida.R;
+import com.ken.tsalida.fragments.EndImageFragment;
+import com.ken.tsalida.fragments.ResponsiveReadingImageFragment;
 
 public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.ViewHolder> {
     Context context;
