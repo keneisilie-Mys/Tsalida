@@ -5,16 +5,6 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="searchViewStyle">@style/searchViewStyleMyEdit</item>
         <item name="colorPrimary">@color/for_backgrounds</item> <!--This changes the status bar -->
-        <item name="colorPrimaryVariant">#FFC107</item>
-        <item name="colorOnPrimary">#03A9F4</item>
-        <item name="colorSecondary">@color/grey</item>
-        <item name="colorSurface">@color/for_backgrounds</item>
-        
-        <item name="colorPrimarySurface">#03A9F4</item>
-        <item name="colorOnSecondary">#03A9F4</item>
-        <item name="colorTertiary">#03A9F4</item>
-        <item name="colorAccent">#03A9F4</item>
-        <item name="colorBackgroundFloating">#03A9F4</item>
 
     </style>
 
@@ -22,6 +12,9 @@
     <style name="searchViewStyleMyEdit" parent="Widget.AppCompat.Light.SearchView">
         <item name="queryBackground">@android:color/transparent</item>
         <item name="submitBackground">@android:color/transparent</item>
+    </style>
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/lighter_yellow</item>
     </style>
 
     <style name="Theme.Tsalida" parent="Base.Theme.Tsalida" />

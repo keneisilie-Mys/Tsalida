@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.ken.tsalida.DepthPageTransformer;
 import com.ken.tsalida.FavoriteDatabase;
 import com.ken.tsalida.adapters.ImageAdapterr;
@@ -55,8 +56,12 @@ public class FavoritesFragment2 extends Fragment {
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("");
-
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        AppBarLayout appBarLayout = activity.findViewById(R.id.appBarLayout);
+        if(appBarLayout!=null){
+            appBarLayout.setExpanded(true, true);
+        }
 
         MenuProvider menuProvider = new MenuProvider() {
             @Override
@@ -67,7 +72,7 @@ public class FavoritesFragment2 extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if(menuItem.getItemId() == android.R.id.home){
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment()).commit();
                 }
                 if(menuItem.getItemId() == R.id.item1){
                     int position = viewPager2.getCurrentItem();

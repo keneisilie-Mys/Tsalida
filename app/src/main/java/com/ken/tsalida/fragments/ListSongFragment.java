@@ -12,12 +12,16 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 
 import com.ken.tsalida.R;
@@ -44,7 +48,7 @@ public class ListSongFragment extends Fragment {
 
         //Change the toolbar name
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setTitle("List of Hymns");
+        activity.getSupportActionBar().setTitle("List");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         ////Gonna read song titles from ASSETS and add it to the song objects
@@ -167,6 +171,7 @@ public class ListSongFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        TransitionInflater transitionInflater = TransitionInflater.from(requireContext());
         return view;
     }
 }

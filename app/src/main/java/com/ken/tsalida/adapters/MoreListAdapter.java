@@ -57,9 +57,9 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.ViewHo
         cardView.setOnClickListener(view -> {
             Fragment fragment = ((AppCompatActivity)context).getSupportFragmentManager().findFragmentByTag("ResponsiveList");
             if(fragment!=null){
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position), "ResponsiveImage").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position), "ResponsiveImage").commit();
             }else{
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndImageFragment(position), "EndImage").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new EndImageFragment(position), "EndImage").commit();
             }
         });
     }

@@ -4,15 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="7dp"
-    android:layout_marginVertical="6dp"
+    android:layout_marginVertical="1dp"
+    card_view:cardBackgroundColor="@color/for_backgrounds"
 
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:selectableItemBackground"
 
-    card_view:cardElevation="2dp">
+    card_view:cardElevation="1dp">
 
     <LinearLayout
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -22,6 +24,7 @@
             android:layout_height="match_parent"
             android:id="@+id/index"
             android:layout_weight="2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:gravity="center"
             android:text="1"/>
 
@@ -37,9 +40,9 @@
                 android:id="@+id/angami_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="6dp"
+                android:paddingTop="10dp"
                 android:text="angami"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="match_parent"
@@ -47,11 +50,12 @@
                 android:id="@+id/english_title"
                 android:text="english"
                 android:paddingTop="2dp"
-                android:paddingBottom="6dp"/>
+                android:paddingBottom="10dp"/>
 
         </LinearLayout>
 
         <ImageButton
+
             android:background="@color/for_backgrounds"
             android:id="@+id/favorite_button"
             android:tag="0"

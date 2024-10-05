@@ -50,14 +50,13 @@ public class SongFragment extends Fragment {
         this.position = position;
     }
 
-    private View rootView;
     private MenuItem menuItemSong;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_song, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_song, container, false);
 
         //Getting back the collapsed toolbar
         AppBarLayout appBarLayout = getActivity().findViewById(R.id.appBarLayout);

@@ -6,4 +6,5 @@
     android:scrollbars="vertical"
     android:clipToPadding="false"
     android:paddingTop="6dp"
-    android:paddingBottom="6dp"/>
+    android:paddingBottom="6dp"
+    android:layoutAnimation="@anim/layout_animation_slide"/>

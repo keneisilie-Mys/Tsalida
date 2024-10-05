@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.ken.tsalida.adapters.SongTitleAdapter;
 import com.ken.tsalida.fragments.EndFragment;
@@ -53,21 +52,21 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
 
                 //For favorites fragment
                 if(favoriteFragment2!=null && favoriteFragment2.isVisible()){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment()).commit();
                 }
                 //For Responsive reading fragments
                 else if(responsiveImage != null && responsiveImage.isVisible()){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveFragment(), "ResponsiveList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new ResponsiveFragment(), "ResponsiveList").commit();
                 }
                 else if(responsiveList != null && responsiveList.isVisible()){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").commit();
                 }
                 //For End Pages Fragment
                 else if(endImage != null && endImage.isVisible()){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndFragment(), "EndList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new EndFragment(), "EndList").commit();
                 }
                 else if(endList != null && endList.isVisible()){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new MoreFragment(), "MoreFragment").commit();
                 }
 
                 //Double back to exit
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         if(savedInstanceState !=null){
             bottomNavigationView.setSelectedItemId(R.id.item4); //It didn't matter if this is here, the activity retained the seleted item itself when screen was rotated
         }else{
-            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongFragment()).addToBackStack(null).commit();
             bottomNavigationView.setSelectedItemId(R.id.item2);
         }
         //Declaring things to use later
@@ -99,16 +98,17 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 //getSupportFragmentManager().popBackStack("favFragment2", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if(item.getItemId() == R.id.item1){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListSongFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                    //The animation only worked when i set it before replace
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in,R.anim.fade_out).replace(R.id.fragmentContainer, new ListSongFragment()).commit();
                     return true;
                 } else if (item.getItemId() == R.id.item2) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new SongFragment()).commit();
                     return true;
                 }else if (item.getItemId() == R.id.item3) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new FavoritesFragment(), "FavoriteFragment").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit(); //The tag helps find fragments that are added to the backstack
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment()).commit(); //The tag helps find fragments that are added to the backstack
                     return true;
                 }else if (item.getItemId() == R.id.item4) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new MoreFragment()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new MoreFragment()).commit();
                     return true;
                 }
                 return true;
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.item2); //If it comes after replacing the fragment, this method will call the onNavigationItemSelected again
         int adjustedIndex = adjustIndex(songIndex);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new SongFragment(adjustedIndex)).commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new SongFragment(adjustedIndex)).commit();
     }
 
     //Method to adjust the index of the song

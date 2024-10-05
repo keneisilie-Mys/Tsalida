@@ -62,7 +62,7 @@ public class EndImageFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if(menuItem.getItemId() == android.R.id.home){
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndFragment(), "EndFrag").commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new EndFragment(), "EndFrag").commit();
                 }
                 return false;
             }

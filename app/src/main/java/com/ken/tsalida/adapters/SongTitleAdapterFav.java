@@ -109,7 +109,7 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavoriteFragment2").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavoriteFragment2").commit();
             }
         });
 

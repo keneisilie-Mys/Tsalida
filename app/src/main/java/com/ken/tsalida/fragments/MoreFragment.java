@@ -33,11 +33,11 @@ public class MoreFragment extends Fragment {
         Button button3 = view.findViewById(R.id.button3);
 
         button1.setOnClickListener(view1 -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ResponsiveFragment(), "ResponsiveList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new ResponsiveFragment(), "ResponsiveList").commit();
         });
 
         button2.setOnClickListener(view1 -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new EndFragment(), "EndList").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new EndFragment(), "EndList").commit();
         });
         // Inflate the layout for this fragment
         return view;
