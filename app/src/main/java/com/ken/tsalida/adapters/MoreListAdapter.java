@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ken.tsalida.R;
@@ -56,11 +55,14 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.ViewHo
 
         cardView.setOnClickListener(view -> {
             Fragment fragment = ((AppCompatActivity)context).getSupportFragmentManager().findFragmentByTag("ResponsiveList");
-            if(fragment!=null){
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position), "ResponsiveImage").commit();
-            }else{
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new EndImageFragment(position), "EndImage").commit();
-            }
+            view.postDelayed(()->{
+                if(fragment!=null){
+                    ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new ResponsiveReadingImageFragment(position), "ResponsiveImage").commit();
+                }else{
+                    ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new EndImageFragment(position), "EndImage").commit();
+                }
+            }, 100);
+
         });
     }
 }

@@ -25,7 +25,7 @@ public class EndFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_responsive, container, false);
+        View view = inflater.inflate(R.layout.fragment_end, container, false);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("End Pages");
@@ -53,7 +53,7 @@ public class EndFragment extends Fragment {
                 "Thekha Kecha"
         };
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_viewRR);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_viewEP);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MoreListAdapter adapter = new MoreListAdapter(getContext(), titles);
 

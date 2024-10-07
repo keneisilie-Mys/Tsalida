@@ -42,7 +42,6 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
         this.favList = updateList(songList);
     }
     private List<Song> getSongLists(){
-        Log.d("Enter getsongLists", "Success");
         List<Song> songList = new ArrayList<>(); //This is the song object array
         AssetManager assetManager = context.getAssets();
         AssetManager assetManager2 = context.getAssets();
@@ -109,7 +108,9 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavoriteFragment2").commit();
+                view.postDelayed(()->{
+                    ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment2(finalPosition), "FavoriteFragment2").commit();
+                },100);
             }
         });
 
@@ -119,7 +120,9 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
             public void onClick(View view) {
                 updateDatabase(song.getSongIndex(), 0);
                 favList = updateList(songList);
-                filterList(favList);
+                view.postDelayed(()->{
+                    filterList(favList);
+                }, 100);
             }
         });
 

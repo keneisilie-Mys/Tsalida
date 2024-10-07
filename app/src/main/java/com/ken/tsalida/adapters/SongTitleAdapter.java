@@ -98,7 +98,9 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
             @Override
             public void onClick(View view) {
                 if(listener != null){
-                    listener.onClickViewHolder(song.getSongIndex() - 1);
+                    view.postDelayed(()->{
+                        listener.onClickViewHolder(song.getSongIndex() - 1);
+                    },70);
                 }
             }
         });

@@ -9,7 +9,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:selectableItemBackground"
-    card_view:cardBackgroundColor="@color/linear_layout_card_bg"
+    card_view:cardBackgroundColor="@color/for_backgrounds"
 
     card_view:cardElevation="1dp">
 
@@ -37,7 +37,8 @@
             android:paddingTop="6dp"
             android:text="angami"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-medium"
+             />
 
 
 

@@ -39,7 +39,7 @@ public class EndImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_responsive_reading_image, container, false);
+        View view = inflater.inflate(R.layout.fragment_end_image, container, false);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("");
@@ -76,7 +76,7 @@ public class EndImageFragment extends Fragment {
             imageId[i] = getResources().getIdentifier(name, "drawable", getContext().getPackageName());
         }
 
-        ViewPager2 viewPager2 = view.findViewById(R.id.view_pagerRR);
+        ViewPager2 viewPager2 = view.findViewById(R.id.view_pagerEP);
         MoreImagesAdapter adapter = new MoreImagesAdapter(imageId);
         viewPager2.setPageTransformer(new DepthPageTransformer());
         viewPager2.setAdapter(adapter);
