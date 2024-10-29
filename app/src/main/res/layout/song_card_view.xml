@@ -3,8 +3,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="7dp"
-    android:layout_marginVertical="1dp"
+
+    android:layout_marginVertical="0.5dp"
     card_view:cardBackgroundColor="@color/for_backgrounds"
 
     android:clickable="true"
@@ -12,10 +12,10 @@
     android:foreground="?attr/selectableItemBackground"
 
 
-    card_view:cardElevation="1dp">
+    card_view:cardElevation="0.5dp">
 
     <LinearLayout
-        android:padding="5dp"
+        android:paddingRight="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -23,16 +23,25 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
             android:id="@+id/index"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
+            android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:gravity="center"
             android:text="1"/>
 
         <LinearLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey"/>
+
+        <LinearLayout
+            android:layout_marginVertical="5dp"
             android:layout_width="0dp"
             android:id="@+id/innerLinearLayout"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_weight="10"
             android:orientation="vertical">
 
@@ -41,7 +50,7 @@
                 android:id="@+id/angami_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
+                android:paddingTop="20dp"
                 android:text="angami"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textStyle="bold" />
@@ -50,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/english_title"
                 android:text="english"
-                android:paddingTop="2dp"
-                android:paddingBottom="10dp"/>
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp"/>
 
         </LinearLayout>
 

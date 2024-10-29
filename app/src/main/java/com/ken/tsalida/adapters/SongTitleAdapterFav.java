@@ -120,9 +120,21 @@ public class SongTitleAdapterFav extends RecyclerView.Adapter<SongTitleAdapterFa
             public void onClick(View view) {
                 updateDatabase(song.getSongIndex(), 0);
                 favList = updateList(songList);
+                favButton.animate().setDuration(100).scaleX(1.5f).scaleY(1.5f).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        favButton.animate().setDuration(50).scaleX(1.0f).scaleY(1.0f);
+                    }
+                });
+                cardView.animate().setDuration(200).translationX(-900.0f).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        cardView.animate().setDuration(1).translationX(1.0f);
+                    }
+                });
                 view.postDelayed(()->{
                     filterList(favList);
-                }, 100);
+                }, 200);
             }
         });
 

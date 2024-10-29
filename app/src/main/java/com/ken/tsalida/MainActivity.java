@@ -2,6 +2,8 @@ package com.ken.tsalida;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import com.ken.tsalida.adapters.SongTitleAdapter;
 import com.ken.tsalida.fragments.EndFragment;
@@ -36,12 +39,20 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //        window.setStatusBarColor(ContextCompat.getColor(this, R.color.for_status_bars));
 
+        bottomNavigationView.post(new Runnable() { //This post ensures that the code is run after the bottomNav has been created
+            @Override
+            public void run() {
+                putMargin();
+            }
+        });
+
 
         Toast toast = Toast.makeText(MainActivity.this, "Press Back Again To Exit", Toast.LENGTH_SHORT);
         //On back pressed
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                Fragment favoriteFragment = getSupportFragmentManager().findFragmentByTag("FavFragment");
                 Fragment favoriteFragment2 = getSupportFragmentManager().findFragmentByTag("FavoriteFragment2");
 
                 Fragment responsiveImage = getSupportFragmentManager().findFragmentByTag("ResponsiveImage");
@@ -50,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
                 Fragment endImage = getSupportFragmentManager().findFragmentByTag("EndImage");
                 Fragment endList = getSupportFragmentManager().findFragmentByTag("EndList");
 
+                if(favoriteFragment!=null && favoriteFragment.isVisible()){
+                    bottomNavigationView.animate().translationY(0).setDuration(300);
+                }
                 //For favorites fragment
                 if(favoriteFragment2!=null && favoriteFragment2.isVisible()){
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_frm_left, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment()).commit();
@@ -98,16 +112,21 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 //getSupportFragmentManager().popBackStack("favFragment2", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if(item.getItemId() == R.id.item1){
+                    resetMargin();
                     //The animation only worked when i set it before replace
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in,R.anim.fade_out).replace(R.id.fragmentContainer, new ListSongFragment()).commit();
                     return true;
                 } else if (item.getItemId() == R.id.item2) {
+
+                    putMargin();
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new SongFragment()).commit();
                     return true;
                 }else if (item.getItemId() == R.id.item3) {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment()).commit(); //The tag helps find fragments that are added to the backstack
+                    resetMargin();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new FavoritesFragment(), "FavFragment").commit(); //The tag helps find fragments that are added to the backstack
                     return true;
                 }else if (item.getItemId() == R.id.item4) {
+                    resetMargin();
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new MoreFragment()).commit();
                     return true;
                 }
@@ -135,6 +154,24 @@ public class MainActivity extends AppCompatActivity implements SongTitleAdapter.
         bottomNavigationView.setSelectedItemId(R.id.item2); //If it comes after replacing the fragment, this method will call the onNavigationItemSelected again
         int adjustedIndex = adjustIndex(songIndex);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.fade_out).replace(R.id.fragmentContainer, new SongFragment(adjustedIndex)).commit();
+    }
+
+    //Change margin of the frame layout
+    public void putMargin(){
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        int height = bottomNavigationView.getHeight();
+        FrameLayout fragmentContainerView = findViewById(R.id.fragmentContainer);
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) fragmentContainerView.getLayoutParams();
+        marginLayoutParams.bottomMargin = height;
+        fragmentContainerView.setLayoutParams(marginLayoutParams);
+    }
+
+    //Method to revert the frameLayout margin to default
+    public void resetMargin(){
+        FrameLayout fragmentContainerView = findViewById(R.id.fragmentContainer);
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) fragmentContainerView.getLayoutParams();
+        marginLayoutParams.bottomMargin = 0;
+        fragmentContainerView.setLayoutParams(marginLayoutParams);
     }
 
     //Method to adjust the index of the song

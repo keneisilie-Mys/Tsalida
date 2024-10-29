@@ -7,6 +7,7 @@
         <item name="colorPrimary">@color/for_backgrounds</item> <!--This changes the status bar -->
 
     </style>
+    <style name="Theme.Tsalida" parent="Base.Theme.Tsalida" />
 
     <!-- Overriding the search view background when it is clicked (Removing the bottom horizontal line) -->
     <style name="searchViewStyleMyEdit" parent="Widget.AppCompat.Light.SearchView">
@@ -14,9 +15,13 @@
         <item name="submitBackground">@android:color/transparent</item>
     </style>
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/lighter_yellow</item>
+        <item name="android:color">@color/lighter_brown</item>
     </style>
 
-    <style name="Theme.Tsalida" parent="Base.Theme.Tsalida" />
+    <!-- Custom Text Appearance -->
+    <style name="customTextAppearance" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
 
 </resources>

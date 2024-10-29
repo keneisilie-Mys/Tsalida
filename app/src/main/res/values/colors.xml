@@ -4,13 +4,10 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="for_backgrounds">#FFFFFFFF</color>
-    <color name="for_status_bars">#FFFFFFFF</color>
-    <color name="linear_layout_card_bg">#F1F1F1</color>
     <color name="grey">#BAB8B8</color>
-    <color name="bottom_tint">#FFAB00</color>
-    <color name="lighter_yellow">#FAECA6</color>
-    <color name="caramel">#C68E17</color>
-    <color name="toolbar_color">#65350F</color>
-    <color name="yellow">#FBB917</color>
+
+    <color name="toolbar_color">#9E5922</color>
+    <color name="lighter_toolbar">#9E6D45</color>
+    <color name="lighter_brown">#CEAB8E</color>
 
 </resources>

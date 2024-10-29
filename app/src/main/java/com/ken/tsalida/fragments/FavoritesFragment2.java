@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ken.tsalida.DepthPageTransformer;
 import com.ken.tsalida.FavoriteDatabase;
 import com.ken.tsalida.adapters.ImageAdapterr;
@@ -57,6 +58,8 @@ public class FavoritesFragment2 extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        BottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigation);
+        bottomNavigationView.animate().translationY(0).setDuration(300);
 
         AppBarLayout appBarLayout = activity.findViewById(R.id.appBarLayout);
         if(appBarLayout!=null){

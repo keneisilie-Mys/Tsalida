@@ -82,6 +82,7 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
                 favButton.setTag("1");
                 favButton.setImageResource(R.drawable.favorite_filled_icon);
             }else{
+                favButton.setTag("0");
                 favButton.setImageResource(R.drawable.favorites_icon);
             }
             cursor.close();
@@ -110,9 +111,22 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
             public void onClick(View view) {
                 if((favButton.getTag()).equals("0")){  //use equals because the getTag returns a String object
                     favButton.setImageResource(R.drawable.favorite_filled_icon);
+                    favButton.animate().setDuration(100).scaleY(1.7f).scaleX(1.7f).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            favButton.animate().setDuration(50).scaleX(1.f).scaleY(1f);
+                        }
+                    });
+
                     updateDatabase(song.getSongIndex(), 1);
                     favButton.setTag("1");
                 }else{
+                    favButton.animate().setDuration(100).scaleY(0.3f).scaleX(0.3f).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            favButton.animate().setDuration(50).scaleX(1.0f).scaleY(1.0f);
+                        }
+                    });
                     favButton.setImageResource(R.drawable.favorites_icon);
                     updateDatabase(song.getSongIndex(), 0);
                     favButton.setTag("0");
@@ -126,7 +140,6 @@ public class SongTitleAdapter extends RecyclerView.Adapter<SongTitleAdapter.View
         try{
             ContentValues contentValues = new ContentValues();
             contentValues.put("IS_FAVORITE", tag);
-
 
             SQLiteOpenHelper openHelper = new FavoriteDatabase(context);
             SQLiteDatabase database = openHelper.getReadableDatabase();

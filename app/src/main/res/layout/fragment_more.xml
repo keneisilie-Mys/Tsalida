@@ -8,12 +8,12 @@
     tools:context=".fragments.MoreFragment"
     android:orientation="vertical"
     android:background="@color/for_backgrounds"
-    android:layout_marginStart="10dp">
+    android:paddingStart="10dp">
 
     <androidx.cardview.widget.CardView
         android:foreground="?android:selectableItemBackground"
         android:id="@+id/card_view1"
-        card_view:cardElevation="1dp"
+        card_view:cardElevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -28,18 +28,18 @@
                 android:src="@drawable/responsive_icon"
                 android:contentDescription="@string/responsive"/>
             <TextView
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/responsive"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"/>
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:foreground="?android:selectableItemBackground"
         android:id="@+id/card_view2"
         android:layout_marginTop="1dp"
-        app:cardElevation="1dp"
+        app:cardElevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -54,18 +54,18 @@
                 android:src="@drawable/end_pages"
                 android:contentDescription="@string/end"/>
             <TextView
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/end"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"/>
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:foreground="?android:selectableItemBackground"
         android:id="@+id/card_view3"
         android:layout_marginTop="1dp"
-        card_view:cardElevation="1dp"
+        card_view:cardElevation="0.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -80,11 +80,11 @@
                 android:src="@drawable/support_icon"
                 android:contentDescription="@string/support"/>
             <TextView
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/support"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"/>
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
