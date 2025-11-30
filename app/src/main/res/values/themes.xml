@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TsalidaSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/tsalida_no_bg</item>
+        <item name="postSplashScreenTheme">@style/Theme.Tsalida</item>
+    </style>
+    <style name="Theme.Tsalida" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>
