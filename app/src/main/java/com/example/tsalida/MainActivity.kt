@@ -2,6 +2,7 @@ package com.example.tsalida
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,7 +57,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -77,8 +76,6 @@ import java.util.Locale
 
 
 class MainActivity : ComponentActivity() {
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -101,8 +98,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-const val TAG = "TsalidaLog"
-
 enum class Destinations(
     val route: String,
     val label: String,
@@ -110,7 +105,7 @@ enum class Destinations(
     val iconId: Int
 ){
     LIST("list", "List" , "List Icon", R.drawable.list_svgrepo_com),
-    SONGS("songs", "Songs", "Songs Icon", R.drawable.music_note_svgrepo_com),
+    SONGS("songs/{startPage}", "Songs", "Songs Icon", R.drawable.music_note_svgrepo_com),
     FAVORITES("favorites", "Favorites", "Favorites Icon", R.drawable.heart_svgrepo_com),
     MORE("more", "More", "More Icon", R.drawable.more_circle_smborder_svgrepo_com)
 }
@@ -144,8 +139,12 @@ fun SongsBar(pagerState: PagerState){
 
 //Pages
 @Composable
-fun SongsPage(){
+fun SongsPage(startPage: Int = 0){
     val pageState = rememberPagerState(pageCount = {432})
+    LaunchedEffect(startPage) {
+        pageState.scrollToPage(startPage)
+    }
+
     Scaffold(topBar = {SongsBar(pageState)}, containerColor = Color.White) { innerPadding->
         HorizontalPager(state = pageState, modifier = Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())) { page->
             ZoomableAsyncImage(String.format(Locale.US, "file:///android_asset/Hymns/p%d.jpg", page+1), "Image")
@@ -154,10 +153,14 @@ fun SongsPage(){
 }
 
 
-@Preview
+
 @Composable
-fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: String = "English", navController: NavHostController){
-    Surface(Modifier.fillMaxWidth().clickable{navController.navigate(Destinations.SONGS.route)}, color = Color.White, shadowElevation = 1.dp) {
+fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: String = "English", navController: NavHostController, onChangeDestination: (Int) -> Unit){
+
+    val helper = DatabaseHelper(LocalContext.current)
+    var isFav by remember { mutableIntStateOf(helper.getFavorite(helper.readableDatabase, songNo)) }
+    Surface(Modifier.fillMaxWidth().clickable{navController.navigate("songs/$songNo"); onChangeDestination(
+        Destinations.SONGS.ordinal)}, color = Color.White, shadowElevation = 1.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.width(10.dp))
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
@@ -169,7 +172,9 @@ fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: Stri
                 }
             }
             Row() {
-                Icon(painterResource(R.drawable.heart_svgrepo_com), "Heart Icon", Modifier.size(25.dp))
+                IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, songNo); if(isFav == 0)isFav = 1 else isFav = 0}) {
+                    if(isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com),"Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
+                }
                 Spacer(Modifier.width(10.dp))
                 Icon(painterResource(R.drawable.share_2_svgrepo_com), "Share Icon", Modifier.size(25.dp))
             }
@@ -179,11 +184,11 @@ fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: Stri
 }
 
 @Composable
-fun ListPage(navController: NavHostController){
+fun ListPage(navController: NavHostController, onChangeDestination: (Int) -> Unit){
     Column() {
         LazyColumn(contentPadding = PaddingValues(0.dp, 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(SongList.songs){song ->
-                SongCard(song.songNo, song.angamiTitle, song.englishTitle, navController)
+                SongCard(song.songNo, song.angamiTitle, song.englishTitle, navController, onChangeDestination)
             }
         }
     }
@@ -199,17 +204,25 @@ fun MorePage(){
 
 
 @Composable
-fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier){
+fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier, onChangeDestination: (Int) -> Unit){
     NavHost(navHostController, startDestination.route, modifier = modifier) {
-        Destinations.entries.forEach { destinations ->
-            composable(destinations.route){
-                when(destinations){
-                    Destinations.SONGS -> SongsPage()
-                    Destinations.LIST -> ListPage(navHostController)
-                    Destinations.FAVORITES -> FavoritesPage()
-                    Destinations.MORE -> MorePage()
-                }
-            }
+
+        composable(Destinations.SONGS.route){ backStackEntry->
+            var startPage = 0
+
+            val argInRoute = backStackEntry.arguments?.getString("startPage")?: "{startPage}"
+            if(argInRoute.equals("{startPage}")) startPage = 1 else startPage = argInRoute.toInt()
+
+            SongsPage(startPage-1)
+        }
+        composable(Destinations.LIST.route) {
+            ListPage(navHostController, onChangeDestination)
+        }
+        composable(Destinations.FAVORITES.route) {
+            FavoritesPage()
+        }
+        composable(Destinations.MORE.route) {
+            MorePage()
         }
     }
 }
@@ -249,6 +262,6 @@ fun TsalidaApp(modifier: Modifier = Modifier){
     }
     }) {
         contentPadding ->
-        AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding())
+        AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding(), {num-> selectedDestinations = num})
     }
 }
