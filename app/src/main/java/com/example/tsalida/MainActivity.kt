@@ -2,7 +2,6 @@ package com.example.tsalida
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -34,6 +34,8 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,32 +45,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tsalida.data.DatabaseHelper
-import com.example.tsalida.data.SongList
 import com.example.tsalida.ui.theme.TsalidaTheme
+import com.example.tsalida.viewModels.ListViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
@@ -129,7 +138,7 @@ fun SongsBar(pagerState: PagerState){
         isFav = databaseHelper.getFavorite(databaseHelper.readableDatabase, pagerState.currentPage + 1)
     }
     TopAppBar(windowInsets = TopAppBarDefaults.windowInsets, title = {Text("")}, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
-        actions = {IconButton(onClick = {updateDatabase(pagerState, context); if(isFav == 0) isFav = 1 else isFav = 0}) {
+        actions = {IconButton(onClick = {updateDatabase(pagerState, context); isFav =  if(isFav == 0) 1 else 0}) {
             if (isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com), "Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
         }
         IconButton(onClick = {}) {
@@ -171,8 +180,8 @@ fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: Stri
                     Text(englishTitle, fontWeight = FontWeight.Normal, fontSize = 12.sp)
                 }
             }
-            Row() {
-                IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, songNo); if(isFav == 0)isFav = 1 else isFav = 0}) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, songNo); isFav = if(isFav == 0) 1 else 0}) {
                     if(isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com),"Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
                 }
                 Spacer(Modifier.width(10.dp))
@@ -183,12 +192,45 @@ fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: Stri
     }
 }
 
+@Preview
 @Composable
-fun ListPage(navController: NavHostController, onChangeDestination: (Int) -> Unit){
-    Column() {
+fun test(){
+    val viewModel: ListViewModel = viewModel()
+    var searchQuery = ""
+    Surface(contentColor = colorResource(R.color.tsalida_main_color)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedTextField(shape = RoundedCornerShape(10.dp), leadingIcon = {Icon(painterResource(R.drawable.search_icons8),"Search Icon", modifier = Modifier.size(25.dp).padding(3.dp))}, modifier = Modifier.height(30.dp), value = searchQuery, onValueChange = {searchQuery = it; viewModel.filterList("String")})
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ListPage(navController: NavHostController, onChangeDestination: (Int) -> Unit, viewModel: ListViewModel = viewModel()){
+    val filteredItems by viewModel.filteredList.collectAsStateWithLifecycle()
+    var searchQuery by rememberSaveable {mutableStateOf("") }
+    var isFocus by rememberSaveable { mutableStateOf(false)}
+    val focusManager = LocalFocusManager.current
+    Column {
+
+        OutlinedTextField(placeholder = {Text("Search",
+                            style = TextStyle(fontSize = 15.sp, color = Color.White))},
+                            textStyle = TextStyle(fontSize = 15.sp),
+                            shape = RoundedCornerShape(30.dp),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(20.dp, 5.dp).onFocusChanged{focusState -> isFocus = focusState.isFocused},
+                            value = searchQuery,
+                            leadingIcon = {if (isFocus) Icon(painterResource(R.drawable.back_svgrepo_com),"Back Icon", tint = Color.White, modifier = Modifier.size(30.dp).padding(3.dp).clickable(onClick = {focusManager.clearFocus(); searchQuery = ""; viewModel.filterList("")})) else Icon(painterResource(R.drawable.search_icons8),"Search Icon", tint = Color.White, modifier = Modifier.size(30.dp).padding(3.dp))},
+                            onValueChange = {searchQuery = it; viewModel.filterList(searchQuery)},
+                            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = colorResource(R.color.tsalida_list_color), unfocusedContainerColor = colorResource(R.color.tsalida_main_color), focusedContainerColor = colorResource(R.color.tsalida_main_color), unfocusedBorderColor = colorResource(R.color.tsalida_main_color), focusedTextColor = Color.White),
+                            trailingIcon = {if (isFocus) Icon(painterResource(R.drawable.cross_svgrepo_com), "Cross Icon", Modifier.size(30.dp).clickable(onClick = {searchQuery = ""; viewModel.filterList("")}), tint = Color.White)}
+                            )
+
+
         LazyColumn(contentPadding = PaddingValues(0.dp, 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(SongList.songs){song ->
-                SongCard(song.songNo, song.angamiTitle, song.englishTitle, navController, onChangeDestination)
+            items(filteredItems){ item->
+                SongCard(item.songNo, item.angamiTitle, item.englishTitle, navController, onChangeDestination)
             }
         }
     }
@@ -208,10 +250,10 @@ fun AppNavHost(navHostController: NavHostController, startDestination: Destinati
     NavHost(navHostController, startDestination.route, modifier = modifier) {
 
         composable(Destinations.SONGS.route){ backStackEntry->
-            var startPage = 0
+            var startPage: Int
 
             val argInRoute = backStackEntry.arguments?.getString("startPage")?: "{startPage}"
-            if(argInRoute.equals("{startPage}")) startPage = 1 else startPage = argInRoute.toInt()
+            startPage = if(argInRoute == "{startPage}") 1 else argInRoute.toInt()
 
             SongsPage(startPage-1)
         }
