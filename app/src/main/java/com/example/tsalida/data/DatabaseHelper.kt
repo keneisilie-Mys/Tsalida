@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-import android.util.Log
 
 class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -43,6 +42,7 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
     }
 
     fun updateFavorite(db: SQLiteDatabase, pageNo: Int){
+
         val projection = arrayOf(TsalidaEntries.COLUMN_NAME_FAV)
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf("$pageNo")
@@ -58,6 +58,19 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
             put(TsalidaEntries.COLUMN_NAME_FAV, if(isFavorite == 0)1 else 0)
         }
         db.update(TsalidaEntries.TABLE_NAME, row, "${BaseColumns._ID} = ?", arrayOf("$pageNo"))
+        specialFavUpdate(db, pageNo, row)
+    }
+
+    fun specialFavUpdate(db: SQLiteDatabase, pageNo: Int, row: ContentValues){
+        //97 167 226 242 248 254 267 274 331 428
+        if (pageNo == 97 || pageNo == 167 || pageNo == 226 || pageNo == 242 || pageNo == 248 || pageNo == 254 || pageNo == 267 || pageNo == 274 || pageNo == 331 || pageNo == 427){
+            val pageNo2 = pageNo+1
+            db.update(TsalidaEntries.TABLE_NAME, row, "${BaseColumns._ID} = ?", arrayOf("$pageNo2"))
+        }
+        if (pageNo == 98 || pageNo == 168 || pageNo == 227 || pageNo == 243 || pageNo == 249 || pageNo == 255 || pageNo == 268 || pageNo == 275 || pageNo == 332 || pageNo == 428){
+            val pageNo2 = pageNo-1
+            db.update(TsalidaEntries.TABLE_NAME, row, "${BaseColumns._ID} = ?", arrayOf("$pageNo2"))
+        }
     }
 
     companion object{

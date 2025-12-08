@@ -1,7 +1,12 @@
 package com.example.tsalida
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -63,9 +68,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -81,6 +86,8 @@ import com.example.tsalida.viewModels.ListViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Locale
 
 
@@ -120,17 +127,11 @@ enum class Destinations(
 }
 
 
-
-fun updateDatabase(pagerState: PagerState, context: Context){
-    val databaseHelper = DatabaseHelper(context)
-    val db = databaseHelper.writableDatabase
-    databaseHelper.updateFavorite(db, pagerState.currentPage + 1)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SongsBar(pagerState: PagerState){
     var isFav by remember { mutableIntStateOf(0) }
+
     val context = LocalContext.current
     val databaseHelper = DatabaseHelper(context)
     isFav = databaseHelper.getFavorite(databaseHelper.readableDatabase, pagerState.currentPage + 1)
@@ -138,18 +139,80 @@ fun SongsBar(pagerState: PagerState){
         isFav = databaseHelper.getFavorite(databaseHelper.readableDatabase, pagerState.currentPage + 1)
     }
     TopAppBar(windowInsets = TopAppBarDefaults.windowInsets, title = {Text("")}, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
-        actions = {IconButton(onClick = {updateDatabase(pagerState, context); isFav =  if(isFav == 0) 1 else 0}) {
+        actions = {IconButton(onClick = {databaseHelper.updateFavorite(databaseHelper.writableDatabase, pagerState.currentPage+1); isFav =  if(isFav == 0) 1 else 0}) {
             if (isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com), "Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
         }
-        IconButton(onClick = {}) {
+        IconButton(onClick = {shareImage(context, pagerState.currentPage+1)}) {
             Icon(painterResource(R.drawable.share_2_svgrepo_com), "Share Icon", Modifier.size(25.dp))
         }})
 }
 
+fun shareImage(context: Context, pageNo: Int){
+    try {
+        val inputStream = context.assets.open("Hymns/p$pageNo.jpg")
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream.close()
+        val cachePath = File(context.cacheDir, "images")
+        cachePath.mkdirs()
+        val newFile = File(cachePath, "share_image.png")
+        val stream = FileOutputStream(newFile)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        stream.close()
+        val contentUri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", newFile)
+
+        //Sharing two pages
+        if (pageNo == 97 || pageNo == 167 || pageNo == 226 || pageNo == 242 || pageNo == 248 || pageNo == 254 || pageNo == 267 || pageNo == 274 || pageNo == 331 || pageNo == 427){
+            specialIntent(context, pageNo+1, contentUri, cachePath)
+            return
+        }
+        if (pageNo == 98 || pageNo == 168 || pageNo == 227 || pageNo == 243 || pageNo == 249 || pageNo == 255 || pageNo == 268 || pageNo == 275 || pageNo == 332 || pageNo == 428){
+            specialIntent(context, pageNo-1, contentUri, cachePath)
+            return
+        }
+        //Share only one page
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            setDataAndType(contentUri, context.contentResolver.getType(contentUri))
+            putExtra(Intent.EXTRA_STREAM, contentUri)
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "Share via..."))
+    }catch (e: Exception){
+        Log.d("ErrorTsalida", "ErrorTsalida")
+    }
+}
+
+fun specialIntent(context: Context, pageNo: Int, contentUri: Uri, cachePath: File){
+    try {
+        val inputStream = context.assets.open("Hymns/p$pageNo.jpg")
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream.close()
+        val newFile2 = File(cachePath, "share_image2.png")
+        val stream = FileOutputStream(newFile2)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        stream.close()
+        val contentUri2 = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", newFile2)
+        val arrayUri = ArrayList<Uri>()
+        arrayUri.add(contentUri)
+        arrayUri.add(contentUri2)
+        val shareIntent2 = Intent().apply {
+            action = Intent.ACTION_SEND_MULTIPLE
+            type = "image/*"
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, arrayUri)
+        }
+        context.startActivity(Intent.createChooser(shareIntent2, "Share via..."))
+    }catch (e: Exception){
+        Log.d("Error in special Intent", "Error in special Intent")
+    }
+}
+
+
+
 //Pages
 @Composable
 fun SongsPage(startPage: Int = 0){
-    val pageState = rememberPagerState(pageCount = {432})
+    val pageState = rememberPagerState(pageCount = {433})
     LaunchedEffect(startPage) {
         pageState.scrollToPage(startPage)
     }
@@ -163,12 +226,29 @@ fun SongsPage(startPage: Int = 0){
 
 
 
+fun fixSongNo(songNo: Int): Int{
+    var pageNo = songNo
+    if (songNo>97 && songNo<=166) pageNo += 1
+    if (songNo>166 && songNo<=224) pageNo += 2
+    if (songNo>224 && songNo<=239) pageNo += 3
+    if (songNo>239 && songNo<=244) pageNo += 4
+    if (songNo>244 && songNo<=249) pageNo += 5
+    if (songNo>249 && songNo<=261) pageNo += 6
+    if (songNo>261 && songNo<=267) pageNo += 7
+    if (songNo>267 && songNo<=323) pageNo += 8
+    if (songNo>323 && songNo<=418) pageNo += 9
+    if (songNo>418 && songNo<=423) pageNo += 10
+
+    return pageNo
+}
+
 @Composable
 fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: String = "English", navController: NavHostController, onChangeDestination: (Int) -> Unit){
-
+    val actualSongNo = fixSongNo(songNo)
+    val context = LocalContext.current
     val helper = DatabaseHelper(LocalContext.current)
-    var isFav by remember { mutableIntStateOf(helper.getFavorite(helper.readableDatabase, songNo)) }
-    Surface(Modifier.fillMaxWidth().clickable{navController.navigate("songs/$songNo"); onChangeDestination(
+    var isFav by rememberSaveable { mutableIntStateOf(helper.getFavorite(helper.readableDatabase, actualSongNo)) }
+    Surface(Modifier.fillMaxWidth().clickable{Log.d("Actual Song", "ActualSong : $actualSongNo, SongNo : $songNo");navController.navigate("songs/$actualSongNo"); onChangeDestination(
         Destinations.SONGS.ordinal)}, color = Color.White, shadowElevation = 1.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.width(10.dp))
@@ -181,29 +261,19 @@ fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: Stri
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, songNo); isFav = if(isFav == 0) 1 else 0}) {
+                IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, actualSongNo); isFav = if(isFav == 0) 1 else 0}) {
                     if(isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com),"Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
                 }
                 Spacer(Modifier.width(10.dp))
-                Icon(painterResource(R.drawable.share_2_svgrepo_com), "Share Icon", Modifier.size(25.dp))
+                IconButton(onClick = {shareImage(context, actualSongNo)}) {
+                    Icon(painterResource(R.drawable.share_2_svgrepo_com), "Share Icon", Modifier.size(25.dp))
+                }
             }
             Spacer(Modifier.width(15.dp))
         }
     }
 }
 
-@Preview
-@Composable
-fun test(){
-    val viewModel: ListViewModel = viewModel()
-    var searchQuery = ""
-    Surface(contentColor = colorResource(R.color.tsalida_main_color)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-
-            OutlinedTextField(shape = RoundedCornerShape(10.dp), leadingIcon = {Icon(painterResource(R.drawable.search_icons8),"Search Icon", modifier = Modifier.size(25.dp).padding(3.dp))}, modifier = Modifier.height(30.dp), value = searchQuery, onValueChange = {searchQuery = it; viewModel.filterList("String")})
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -229,7 +299,8 @@ fun ListPage(navController: NavHostController, onChangeDestination: (Int) -> Uni
 
 
         LazyColumn(contentPadding = PaddingValues(0.dp, 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(filteredItems){ item->
+
+            items(items = filteredItems, key = {it.songNo}){ item->
                 SongCard(item.songNo, item.angamiTitle, item.englishTitle, navController, onChangeDestination)
             }
         }

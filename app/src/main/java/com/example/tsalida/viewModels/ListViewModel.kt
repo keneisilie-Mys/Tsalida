@@ -1,7 +1,5 @@
 package com.example.tsalida.viewModels
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.tsalida.data.Song
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -436,13 +434,10 @@ class ListViewModel: ViewModel(){
         Song(423, "A Khunhie Jisu Ngu Zo Mecie", "I Shall Be Ready")
     )
 
-    public var searchQuery = ""
-
     private val _filteredList = MutableStateFlow(songs)
     var filteredList: StateFlow<List<Song>> = _filteredList
 
     fun filterList(queryString: String){
-        searchQuery = queryString
         _filteredList.value = songs.filter { it.songNo.toString().contains(queryString, ignoreCase = true) || it.angamiTitle.contains(queryString, ignoreCase = true) || it.englishTitle.contains(queryString, ignoreCase = true)}
     }
 }
