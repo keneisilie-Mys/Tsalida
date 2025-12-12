@@ -1,1 +1,3 @@
-Nothing here
+
+#Fix the search bar in the list page(the focus part)
+#Add animation to favorite list page

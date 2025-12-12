@@ -3,9 +3,10 @@ package com.example.tsalida.data
 data class Song(val songNo: Int,
                 val angamiTitle: String,
                 val englishTitle: String)
+data class Page(val pageNo: Int, val title: String)
 
 object SongList{
-    val songs = arrayOf(
+    val songs = listOf(
         Song(1, "Hie Pete Krüu, Kepenuopfü", "O God Our Help In Ages Past"),
         Song(2, "Va Puo Jisu", "One Day"),
         Song(3, "Nie Jisu Tsheliecie", "Take The Name Of Jesus"),
@@ -429,5 +430,47 @@ object SongList{
         Song(421, "Rüna Kezie-u Teigei Ba", "I’m Looking Beyond"),
         Song(422, "A Süla Puo Khrieya", "That’s Why I Love Him"),
         Song(423, "A Khunhie Jisu Ngu Zo Mecie", "I Shall Be Ready")
+    )
+
+    val resPages = listOf(
+        Page(1, "Mha pete Chükeshüu Ukepenuopfü"),
+        Page(2, "Kethezie Khakeshü Kekie"),
+        Page(3, "Seyie Pete Niepuu Ketshe"),
+        Page(4, "Thezho Kerko"),
+        Page(5, "Messiah Kediu"),
+        Page(6, "Khrista Themia Chü Lhoukevor"),
+        Page(7, "Mhakesimia Kro Puo Jisu Pfhükevor"),
+        Page(8, "Jisu Dzülukepfü"),
+        Page(9, "Jisu Meyiemeluo Di Jerusalem Nu Kele"),
+        Page(10, "Kepenuopfü Kuonuou"),
+        Page(11, "Jisu Se"),
+        Page(12, "Jisu Teigei Khoketa"),
+        Page(13, "Khrista Zayiekechü"),
+        Page(14, "Khrista La Vorketuo"),
+        Page(15, "Kemesa Ruopfü"),
+        Page(16, "Missions"),
+        Page(17, "Pentecost"),
+        Page(18, "Khrista Kehou"),
+        Page(19, "Kerükra Ca Kecü"),
+        Page(20, "Thejakepfüthoko"),
+        Page(21, "Khubebo Botho-u mu Puocoko"),
+        Page(22, "Kechado Thakeshü"),
+        Page(23, "Siedzikechü"),
+        Page(24, "Thenou Thukepeluo Die"),
+        Page(25, "Penuokesakecü"),
+        Page(26, "Khrukhrekecü"),
+        Page(27, "Kecha"),
+        Page(28, "Ruopfü Rhütho"),
+        Page(29, "Mha khapie Niepuu Ketsü"),
+        Page(30, "Khristamia Kekhrie"),
+        Page(31, "Khristamia Rheisietaketuo"),
+        Page(32, "Teigei Kinyi")
+    )
+
+    val endPages = listOf(
+        Page(1, "Khristamia Zanu Kemezhieshüketuo La Kehoumia Phrakeshü Die"),
+        Page(2, "Apostelko Kepele"),
+        Page(3, "Niepuu Kecha"),
+        Page(4, "Thekha Kecha")
     )
 }

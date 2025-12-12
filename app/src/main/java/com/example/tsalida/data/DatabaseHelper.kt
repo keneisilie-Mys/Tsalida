@@ -41,6 +41,16 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         return isFavorite
     }
 
+    fun getFavoriteList(db: SQLiteDatabase):ArrayList<Int>{
+        val cursor = db.query(TsalidaEntries.TABLE_NAME, arrayOf(BaseColumns._ID), "${TsalidaEntries.COLUMN_NAME_FAV} = ?", arrayOf("1"), null, null, null)
+        val favoriteList = ArrayList<Int>()
+        while (cursor.moveToNext()){
+            favoriteList.add(cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID)))
+        }
+        cursor.close()
+        return favoriteList
+    }
+
     fun updateFavorite(db: SQLiteDatabase, pageNo: Int){
 
         val projection = arrayOf(TsalidaEntries.COLUMN_NAME_FAV)
