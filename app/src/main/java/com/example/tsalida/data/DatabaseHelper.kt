@@ -10,6 +10,10 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
+        db.execSQL(SQL_CREATE_THEME)
+
+        val row = ContentValues().apply { put(TsalidaEntries.THEME_VALUE, 1) }
+        db.insert(TsalidaEntries.TABLE_NAME_THEME, null, row)
 
         var i=1
         while(i<=433){
@@ -24,6 +28,22 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL(SQL_DELETE_ENTRIES)
         onCreate(db)
+    }
+
+    fun getTheme(db: SQLiteDatabase):Int{
+        val cursor = db.query(TsalidaEntries.TABLE_NAME_THEME, arrayOf(TsalidaEntries.THEME_VALUE), null, null, null, null, null)
+        var value = 1
+        while (cursor.moveToNext()){
+            value = cursor.getInt(cursor.getColumnIndex(TsalidaEntries.THEME_VALUE))
+        }
+        return value
+    }
+
+    fun updateTheme(db: SQLiteDatabase, value: Int){
+        val row = ContentValues().apply {
+            put(TsalidaEntries.THEME_VALUE, value)
+        }
+        db.update(TsalidaEntries.TABLE_NAME_THEME, row, "${BaseColumns._ID} = ?", arrayOf("1"))
     }
 
     fun getFavorite(db: SQLiteDatabase, pageNo: Int): Int {
@@ -88,5 +108,6 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         const val DATABASE_VERSION = 1
         const val SQL_CREATE_ENTRIES = "CREATE TABLE ${TsalidaEntries.TABLE_NAME} (" + "${BaseColumns._ID} INTEGER PRIMARY KEY, " + "${TsalidaEntries.COLUMN_NAME_FAV} INTEGER)"
         const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${TsalidaEntries.TABLE_NAME}"
+        const val SQL_CREATE_THEME = "CREATE TABLE ${TsalidaEntries.TABLE_NAME_THEME} (${BaseColumns._ID} INTEGER PRIMARY KEY, ${TsalidaEntries.THEME_VALUE} INTEGER)"
     }
 }

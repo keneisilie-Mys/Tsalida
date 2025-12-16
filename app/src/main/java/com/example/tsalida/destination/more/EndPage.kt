@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.tsalida.composables.MoreListTopBar
 import com.example.tsalida.composables.MoreTopBar
@@ -23,7 +22,7 @@ import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 
 @Composable
 fun EndListPage(navController: NavHostController){
-    Scaffold(topBar = { MoreListTopBar(MoreDestination.ENDLIST.label, navController) }, containerColor = Color.White) { padding->
+    Scaffold(topBar = { MoreListTopBar(MoreDestination.ENDLIST.label, navController) }) { padding->
         LazyColumn(Modifier.padding(top = padding.calculateTopPadding())) {
             items(items = SongList.endPages, key = {it.pageNo}){
                 PageCard(it.pageNo, it.title, navController, MoreDestination.ENDLIST.route)
@@ -40,7 +39,7 @@ fun EndPage(navController: NavHostController, startPage: Int = 0){
         pagerState.scrollToPage(startPage)
     }
     Scaffold(topBar = {MoreTopBar(MoreDestination.END.label, navController,
-        MoreDestination.END.route, pagerState)}, containerColor = Color.White) { innerPadding->
+        MoreDestination.END.route, pagerState)}) { innerPadding->
         HorizontalPager(pagerState) {page->
             ZoomableAsyncImage(String.format("file:///android_asset/End Pages/end%d.jpg", page+1), "End Page Image", Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding()))
         }

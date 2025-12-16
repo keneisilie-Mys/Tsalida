@@ -1,6 +1,9 @@
 package com.example.tsalida.destination
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -9,7 +12,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,9 +46,9 @@ fun SongsBar(pagerState: PagerState){
     LaunchedEffect(pagerState.currentPage) {
         isFav = databaseHelper.getFavorite(databaseHelper.readableDatabase, pagerState.currentPage + 1)
     }
-    TopAppBar(windowInsets = TopAppBarDefaults.windowInsets, title = {Text("")}, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
+    TopAppBar(windowInsets = TopAppBarDefaults.windowInsets, title = {Text("")}, //colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
         actions = {IconButton(onClick = {databaseHelper.updateFavorite(databaseHelper.writableDatabase, pagerState.currentPage+1); isFav =  if(isFav == 0) 1 else 0}) {
-            if (isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com), "Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
+            if (isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com), "Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = MaterialTheme.colorScheme.primary)
         }
             IconButton(onClick = { CommonFunction.shareImage(context, pagerState.currentPage+1)}) {
                 Icon(painterResource(R.drawable.share_2_svgrepo_com), "Share Icon", Modifier.size(25.dp))
@@ -60,9 +65,13 @@ fun SongsPage(startPage: Int = 0, onChangeDestination: (Int)->Unit){
         pageState.scrollToPage(startPage)
     }
 
-    Scaffold(topBar = {SongsBar(pageState)}, containerColor = Color.White) { innerPadding->
-        HorizontalPager(state = pageState, modifier = Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())) { page->
-            ZoomableAsyncImage(String.format(Locale.US, "file:///android_asset/Hymns/p%d.jpg", page+1), "Image")
+    Scaffold(topBar = {SongsBar(pageState)}) { innerPadding->
+        Column() {
+            Surface(Modifier.height(2.dp).fillMaxWidth(), color = Color.Black) { }
+            HorizontalPager(state = pageState, modifier = Modifier.fillMaxWidth().padding(top = innerPadding.calculateTopPadding())) { page->
+                ZoomableAsyncImage(String.format(Locale.US, "file:///android_asset/Hymns/p%d.jpg", page+1), "Image", modifier = Modifier.fillMaxSize())
+            }
+            Surface(Modifier.height(2.dp).fillMaxWidth(), color = Color.Black) { }
         }
     }
 }

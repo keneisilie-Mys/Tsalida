@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
-class FavoriteViewModel(val repository: FavoriteRepository): ViewModel() {
+class FavoriteViewModel(repository: FavoriteRepository): ViewModel() {
     val favList: StateFlow<List<Song>> = repository.getFavoriteSongs().stateIn(scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000), initialValue = emptyList())
 }

@@ -1,3 +1,8 @@
+#Theme
+#Support
+
+#Animations:
+    Favorite List: Disappearing Card
+    Navigation Changes
 
 #Fix the search bar in the list page(the focus part)
-#Add animation to favorite list page

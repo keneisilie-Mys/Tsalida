@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.flowOn
 
 class FavoriteRepository(context: Context) {
     private val helper = DatabaseHelper(context)
-
     fun getFavoriteSongs(): Flow<List<Song>> = flow {
-        val favoriteIds = helper.getFavoriteList(helper.readableDatabase)
-        val favArrayList = SongList.songs.filter { it.songNo in favoriteIds }
-        emit(favArrayList)
+        while(true){
+            val favoriteIds = helper.getFavoriteList(helper.readableDatabase)
+            val favArrayList = SongList.songs.filter { it.songNo in favoriteIds }
+            emit(favArrayList)
+        }
     }.flowOn(Dispatchers.IO)
 }

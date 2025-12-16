@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,39 +21,35 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tsalida.R
 import com.example.tsalida.data.DatabaseHelper
 import com.example.tsalida.destination.CommonFunction
 
 @Composable
-fun SongCard(songNo: Int = 1, angamiTitle: String = "Angami", englishTitle: String = "English", navController: NavHostController){
+fun SongCard(songNo: Int, angamiTitle: String, englishTitle: String, navController: NavHostController){
     val actualSongNo = CommonFunction.fixSongNo(songNo)
     val context = LocalContext.current
     val helper = DatabaseHelper(LocalContext.current)
     var isFav by rememberSaveable { mutableIntStateOf(helper.getFavorite(helper.readableDatabase, actualSongNo)) }
-    Surface(Modifier.fillMaxWidth().height(100.dp).clickable{navController.navigate("songs/$actualSongNo")}, color = Color.White, shadowElevation = 1.dp) {
+    Surface(Modifier.fillMaxWidth().height(100.dp).clickable{navController.navigate("songs/$actualSongNo")}, shadowElevation = 1.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.width(10.dp))
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "$songNo", modifier = Modifier.width(50.dp), textAlign = TextAlign.Center, color = colorResource(R.color.tsalida_list_color), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                Text(text = "$songNo", modifier = Modifier.width(50.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
                 Column(Modifier.padding(5.dp)) {
-                    Text(angamiTitle, fontWeight = FontWeight.SemiBold, fontSize = 17.sp, color = colorResource(R.color.tsalida_list_color))
+                    Text(angamiTitle, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(3.dp))
-                    Text(englishTitle, fontWeight = FontWeight.Normal, fontSize = 12.sp)
+                    Text(englishTitle, style = MaterialTheme.typography.bodySmall)
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = {helper.updateFavorite(helper.writableDatabase, actualSongNo); isFav = if(isFav == 0) 1 else 0}) {
-                    if(isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com),"Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = Color.Unspecified)
+                    if(isFav == 0) Icon(painterResource(R.drawable.heart_empty_svgrepo_com),"Heart Icon", Modifier.size(25.dp)) else Icon(painterResource(R.drawable.heart_filled_svgrepo_com), "Heart Icon", Modifier.size(25.dp), tint = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(Modifier.width(10.dp))
                 IconButton(onClick = { CommonFunction.shareImage(context, actualSongNo)}) {

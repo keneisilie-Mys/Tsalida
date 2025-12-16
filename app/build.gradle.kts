@@ -46,6 +46,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.6")
     implementation("me.saket.telephoto:zoomable-image-coil:0.8.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.10.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

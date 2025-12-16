@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -25,18 +25,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.tsalida.data.DatabaseHelper
 import com.example.tsalida.destination.Destinations
 import com.example.tsalida.destination.FavoritesPage
 import com.example.tsalida.destination.ListPage
@@ -50,9 +51,19 @@ import com.example.tsalida.destination.more.EndListPage
 import com.example.tsalida.destination.more.EndPage
 import com.example.tsalida.destination.more.ReadingListPage
 import com.example.tsalida.destination.more.ReadingPage
+import com.example.tsalida.destination.more.ThemePage
+import com.example.tsalida.viewModels.ThemeViewModel
+import com.example.tsalida.viewModels.factory.ThemeViewModelFactory
 
 
 class MainActivity : ComponentActivity() {
+    val themeViewModel: ThemeViewModel by viewModels { ThemeViewModelFactory(applicationContext) }
+
+    override fun onPause() {
+        super.onPause()
+        val helper = DatabaseHelper(applicationContext)
+        helper.updateTheme(helper.writableDatabase, themeViewModel.themeValue.value)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -64,12 +75,13 @@ class MainActivity : ComponentActivity() {
             delay(2000)
             setSplashScreen = false
         }
+
+
         enableEdgeToEdge()
         setContent {
-            TsalidaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize().background(colorResource(R.color.tsalida_main_color))) { innerPadding ->
-                    TsalidaApp(modifier = Modifier.padding(innerPadding))
-                }
+            val themeValue by themeViewModel.themeValue.collectAsStateWithLifecycle()
+            TsalidaTheme(themeValue) {
+                TsalidaApp({value-> themeViewModel.changeThemeValue(value)})
             }
         }
     }
@@ -78,13 +90,12 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier, onChangeDestination: (Int) -> Unit){
+fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier, onChangeDestination: (Int) -> Unit, changeThemeValue: (Int) -> Unit){
     NavHost(navHostController, startDestination.route, modifier = modifier) {
 
         composable(Destinations.SONGS.route){ backStackEntry->
             val argInRoute = backStackEntry.arguments?.getString("startPage")?: "{startPage}"
             val startPage = if(argInRoute == "{startPage}") 1 else argInRoute.toInt()
-
             SongsPage(startPage-1, onChangeDestination)
         }
         composable(Destinations.LIST.route) {
@@ -94,7 +105,7 @@ fun AppNavHost(navHostController: NavHostController, startDestination: Destinati
             FavoritesPage(navHostController, onChangeDestination)
         }
         composable(Destinations.MORE.route) {
-            MorePage(navHostController)
+            MorePage(navHostController, onChangeDestination)
         }
 
 
@@ -108,51 +119,55 @@ fun AppNavHost(navHostController: NavHostController, startDestination: Destinati
         }
         composable(MoreDestination.ENDLIST.route){
             EndListPage(navHostController)
-
         }
         composable(MoreDestination.END.route){backStackEntry->
             val argInRoute = backStackEntry.arguments?.getString("pageNo")?: "{pageNo}"
             val pageNo = if(argInRoute == "{pageNo}") 1 else argInRoute.toInt()
             EndPage(navHostController, pageNo-1)
         }
+        composable(MoreDestination.THEME.route) {
+            ThemePage(changeThemeValue)
+        }
     }
 }
 
 
-@Composable
-fun myCustomNavColors(): NavigationBarItemColors {    return NavigationBarItemDefaults.colors(
-    // Define your specific override colors here
-    selectedIconColor = colorResource(R.color.black_text), // Your Tsalida main color?
-    selectedTextColor = colorResource(R.color.black_text),
-
-    unselectedIconColor = colorResource(R.color.black_text_lighter),
-    unselectedTextColor = colorResource(R.color.black_text_lighter),
-
-    indicatorColor = colorResource(R.color.tsalida_main_color)
-)
-}
+//@Composable
+//fun myCustomNavColors(): NavigationBarItemColors {    return NavigationBarItemDefaults.colors(
+//    // Define your specific override colors here
+//    selectedIconColor = colorResource(R.color.black_text), // Your Tsalida main color?
+//    selectedTextColor = colorResource(R.color.black_text),
+//
+//    unselectedIconColor = colorResource(R.color.black_text_lighter),
+//    unselectedTextColor = colorResource(R.color.black_text_lighter),
+//
+//    indicatorColor = colorResource(R.color.tsalida_main_color)
+//)
+//}
 
 @Composable
 fun BottomNavBar(navController: NavController,  selectedDestinations: Int, onChangeDestination: (Int)-> Unit){
     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets, modifier = Modifier.clip(
-        RoundedCornerShape(10.dp, 10.dp)), containerColor = Color.Transparent, tonalElevation = 500.dp) {
+        RoundedCornerShape(10.dp, 10.dp))) {
         Destinations.entries.forEachIndexed { index, destinations ->
             NavigationBarItem(selected = selectedDestinations == index, onClick = {navController.navigate(destinations.route) ; onChangeDestination(index)}, icon = {Icon(
-                ImageVector.vectorResource(destinations.iconId), destinations.contentDescription, modifier = Modifier.size(20.dp))}, label = {Text(destinations.label)}, colors = myCustomNavColors())
+                ImageVector.vectorResource(destinations.iconId), destinations.contentDescription, modifier = Modifier.size(20.dp))}, label = {Text(destinations.label)})
         }
     }
 }
 
 @Composable
-fun TsalidaApp(modifier: Modifier = Modifier){
+fun TsalidaApp(changeThemeValue: (Int)->Unit){
     val navController = rememberNavController()
     val startDestination = Destinations.SONGS
     var selectedDestinations by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
-    Scaffold(modifier = Modifier, containerColor = Color.White, bottomBar = {BottomNavBar(navController, selectedDestinations) { num ->
+    Scaffold(bottomBar = {BottomNavBar(navController, selectedDestinations) { num ->
         selectedDestinations = num
     }
     }) {
         contentPadding ->
-        AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding(), {num-> selectedDestinations = num})
+        Column() {
+            AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding(), {num-> selectedDestinations = num}, changeThemeValue)
+        }
     }
 }
