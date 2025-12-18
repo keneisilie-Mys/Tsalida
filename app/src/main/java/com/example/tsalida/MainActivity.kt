@@ -14,8 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -58,7 +55,6 @@ import com.example.tsalida.viewModels.factory.ThemeViewModelFactory
 
 class MainActivity : ComponentActivity() {
     val themeViewModel: ThemeViewModel by viewModels { ThemeViewModelFactory(applicationContext) }
-
     override fun onPause() {
         super.onPause()
         val helper = DatabaseHelper(applicationContext)
@@ -81,7 +77,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val themeValue by themeViewModel.themeValue.collectAsStateWithLifecycle()
             TsalidaTheme(themeValue) {
-                TsalidaApp({value-> themeViewModel.changeThemeValue(value)})
+                TsalidaApp(themeValue, {value-> themeViewModel.changeThemeValue(value)})
             }
         }
     }
@@ -90,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier, onChangeDestination: (Int) -> Unit, changeThemeValue: (Int) -> Unit){
+fun AppNavHost(navHostController: NavHostController, startDestination: Destinations, modifier: Modifier, onChangeDestination: (Int) -> Unit, changeThemeValue: (Int) -> Unit, themeValue: Int){
     NavHost(navHostController, startDestination.route, modifier = modifier) {
 
         composable(Destinations.SONGS.route){ backStackEntry->
@@ -126,7 +122,7 @@ fun AppNavHost(navHostController: NavHostController, startDestination: Destinati
             EndPage(navHostController, pageNo-1)
         }
         composable(MoreDestination.THEME.route) {
-            ThemePage(changeThemeValue)
+            ThemePage(navHostController, themeValue, changeThemeValue)
         }
     }
 }
@@ -150,14 +146,15 @@ fun BottomNavBar(navController: NavController,  selectedDestinations: Int, onCha
     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets, modifier = Modifier.clip(
         RoundedCornerShape(10.dp, 10.dp))) {
         Destinations.entries.forEachIndexed { index, destinations ->
-            NavigationBarItem(selected = selectedDestinations == index, onClick = {navController.navigate(destinations.route) ; onChangeDestination(index)}, icon = {Icon(
+            NavigationBarItem(selected = selectedDestinations == index, onClick = {navController.popBackStack(
+                Destinations.SONGS.route, index == 1);navController.navigate(destinations.route) ; onChangeDestination(index)}, icon = {Icon(
                 ImageVector.vectorResource(destinations.iconId), destinations.contentDescription, modifier = Modifier.size(20.dp))}, label = {Text(destinations.label)})
         }
     }
 }
 
 @Composable
-fun TsalidaApp(changeThemeValue: (Int)->Unit){
+fun TsalidaApp(themeValue: Int, changeThemeValue: (Int)->Unit){
     val navController = rememberNavController()
     val startDestination = Destinations.SONGS
     var selectedDestinations by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
@@ -167,7 +164,7 @@ fun TsalidaApp(changeThemeValue: (Int)->Unit){
     }) {
         contentPadding ->
         Column() {
-            AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding(), {num-> selectedDestinations = num}, changeThemeValue)
+            AppNavHost(navController, startDestination, Modifier.padding(bottom = contentPadding.calculateBottomPadding()).statusBarsPadding(), {num-> selectedDestinations = num}, changeThemeValue, themeValue)
         }
     }
 }

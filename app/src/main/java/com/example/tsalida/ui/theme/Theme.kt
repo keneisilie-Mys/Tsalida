@@ -419,7 +419,7 @@ fun TsalidaTheme(
 
   MaterialTheme(
     colorScheme = colorScheme,
-    typography = AppTypography,
+    typography = TsalidaTypography,
     content = content
   )
 }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +26,8 @@ fun MorePage(navController: NavHostController, onChangeDestination: (Int)->Unit)
     val book = painterResource(R.drawable.book)
     val theme = painterResource(R.drawable.colors)
     val support = painterResource(R.drawable.support)
-    Column(Modifier.padding(10.dp, 20.dp).fillMaxWidth().fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    val scrollState = rememberScrollState()
+    Column(Modifier.padding(10.dp, 20.dp).fillMaxWidth().fillMaxHeight().verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly) {
             MoreCard(megaphone, "Responsive\nReading", navController, MoreDestination.READINGLIST.route)
             MoreCard(book, "End Pages", navController, MoreDestination.ENDLIST.route)
